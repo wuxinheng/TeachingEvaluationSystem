@@ -1,2 +1,1 @@
 # TeachingEvaluationSystem
-长沙理工大学继续教育学院计算机专业毕业设计
