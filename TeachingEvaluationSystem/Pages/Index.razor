@@ -3,16 +3,31 @@
 <h1>欢迎来到评鉴系统！</h1>
 <TTable TItem="SystemInfo" Data="SystemInfos">
     <FieldColumn Value="context?.Project" Title="项目" />
-    <FieldColumn Value="context?.Info" Title="运行信息" />
+    <FieldColumn Value="context?.Info" Title="运行信息">
+        @if (context is not null)
+        {
+            if (context.Project == "Github")
+            {
+                <TLink Theme="Theme.Primary" Underline Href="@context?.Info">TeachingEvaluationSystem</TLink>
+            }
+            else
+            {
+                @context?.Info
+            }
+        }
+
+
+    </FieldColumn>
 </TTable>
 <SurveyPrompt Title="How is Blazor working for you?" />
+
 @code {
     List<SystemInfo> SystemInfos => new()
     {
         new SystemInfo{Project="日期",Info=DateTime.Today.ToString("D")},
         new SystemInfo{Project="运营时间",Info=$"{Math.Round(DateTime.Now.Subtract(DateTime.Parse("2023年2月21日")).TotalDays,2)}天" },
         new SystemInfo{Project="作者",Info="wuxinheng"},
-        new SystemInfo{Project="Github",Info="赵六"},
+        new SystemInfo{Project="Github",Info="https://github.com/wuxinheng/TeachingEvaluationSystem"},
         new SystemInfo{Project="开源协议",Info="Apache Lincese 2.0"},
     };
 
