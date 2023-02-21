@@ -10,6 +10,18 @@
             {
                 <TLink Theme="Theme.Primary" Underline Href="@context?.Info">TeachingEvaluationSystem</TLink>
             }
+            else if (context.Project == "开源协议")
+            {
+                <TLink Theme="Theme.Primary" Underline Href="@context?.Info">Apache Lincese 2.0</TLink>
+            }
+            else if (context.Project == "作者")
+            {
+                <TLink Theme="Theme.Primary" Underline Href="@context?.Info">wuxinheng</TLink>
+            }
+            else if (context.Project == "博客")
+            {
+                <TLink Theme="Theme.Primary" Underline Href="@context?.Info">xblogs.net</TLink>
+            }
             else
             {
                 @context?.Info
@@ -26,9 +38,10 @@
     {
         new SystemInfo{Project="日期",Info=DateTime.Today.ToString("D")},
         new SystemInfo{Project="运营时间",Info=$"{Math.Round(DateTime.Now.Subtract(DateTime.Parse("2023年2月21日")).TotalDays,2)}天" },
-        new SystemInfo{Project="作者",Info="wuxinheng"},
+        new SystemInfo{Project="作者",Info="https://github.com/wuxinheng"},
         new SystemInfo{Project="Github",Info="https://github.com/wuxinheng/TeachingEvaluationSystem"},
-        new SystemInfo{Project="开源协议",Info="Apache Lincese 2.0"},
+        new SystemInfo{Project="开源协议",Info="https://github.com/wuxinheng/TeachingEvaluationSystem/blob/master/LICENSE"},
+        new SystemInfo{Project="博客",Info="https://xblogs.net"},
     };
 
     class SystemInfo
