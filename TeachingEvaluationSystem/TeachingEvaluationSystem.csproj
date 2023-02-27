@@ -53,4 +53,8 @@
       <PackageReference Include="TDesign" Version="0.4.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\TeachingEvaluationSystem.DB\TeachingEvaluationSystem.DB.csproj" />
+    </ItemGroup>
+
 </Project>
