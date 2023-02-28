@@ -21,28 +21,24 @@ namespace TeachingEvaluationSystem.Data
             _globalInfo = globalInfo;
         }
 
-        public  Task<Comom.Page<User>> GetPage(int index, int size)
+        public Task<Comom.Page<User>> GetPage(int index, int size)
         {
-            try
-            {
-                var users1 = _dbContext.Set<User>().Take(size).Skip((index - 1) * size).ToList();
-                var users = _dbContext.Set<User>().ToList().Take(size).Skip((index-1)*size).ToList();
+                var users = _dbContext.Set<User>().ToList().Take(size).Skip((index - 1) * size).ToList();
                 Comom.Page<User> page = new Comom.Page<User>()
                 {
                     Index = index,
                     Data = users,
                     Size = size,
                     Total = _dbContext.Users.Count(),
-                    TotalPgae = _dbContext.Users.Count(),
+                    TotalPgae = (int)Math.Ceiling(Convert.ToDouble(_dbContext.Users.Count()) / size),
                 };
                 return Task.FromResult(page);
-            }
-            catch (Exception e)
-            {
-
-                throw;
-            }
         }
-
+        public async Task<bool> Detele(User user)
+        {
+            _dbContext.Set<User>().Remove(user);
+            var count = await _dbContext.SaveChangesAsync();
+            return count > 0;
+        }
     }
 }

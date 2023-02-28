@@ -3,19 +3,43 @@
 @using TeachingEvaluationSystem.DB.Entitys;
 @using TeachingEvaluationSystem.Comom;
 @inject UserService UserService
+@inject IJSRuntime JS
 
-<TTable TItem="@User" Data="@Page?.Data" Striped>
+<TTable TItem="User" Data="@Page?.Data" Striped>
     <FieldColumn Value="@context?.Id" Title="Id" />
     <FieldColumn Value="@context?.Name" Title="姓名" />
     <FieldColumn Value="@context?.Email" Title="邮箱" />
+    <FieldColumn  Title="操作">
+        <TButton Theme="Theme.Danger" Size="Size.Small" OnClick="e=>Delete(context)">删除</TButton>
+        <TButton Theme="Theme.Primary" Size="Size.Small">编辑</TButton>
+    </FieldColumn>
 </TTable>
+
 
 @code
 {
-    Page<User> Page = new Page<User>() { Data = new List<User>() };
+    public Page<User> Page = new Page<User>() { Data = new List<User>() };
+
 
     protected override async Task OnInitializedAsync()
     {
-        Page = await UserService.GetPage(1, 1);
+        Page = await UserService.GetPage(1, 10000);
+    }
+
+    private async Task Delete(User user)
+    {
+        if (user.Name == "admin")
+        {
+            await JS.InvokeAsync<bool>("alert", "禁止删除系统管理员！");
+            await OnInitializedAsync();
+            return;
+        }
+        var confirm = await JS.InvokeAsync<bool>("confirm", new string?[] { "您确定要删除吗？" });
+        if (confirm)
+        {
+
+            await UserService.Detele(user);
+            await OnInitializedAsync();
+        }
     }
 }
