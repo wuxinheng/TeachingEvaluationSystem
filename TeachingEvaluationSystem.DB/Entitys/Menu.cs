@@ -11,6 +11,6 @@ namespace TeachingEvaluationSystem.DB.Entitys
         public int Id { get; set; }
         public string? Name { get; set; }
         public string? Route { get; set; }
-        //public List<Role> Roles { get; set; }
+        public List<Role>? Roles { get; set; }
     }
 }

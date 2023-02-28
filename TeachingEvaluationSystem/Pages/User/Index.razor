@@ -1,0 +1,21 @@
+﻿@page "/user/index"
+@using TeachingEvaluationSystem.Data;
+@using TeachingEvaluationSystem.DB.Entitys;
+@using TeachingEvaluationSystem.Comom;
+@inject UserService UserService
+
+<TTable TItem="@User" Data="@Page?.Data" Striped>
+    <FieldColumn Value="@context?.Id" Title="Id" />
+    <FieldColumn Value="@context?.Name" Title="姓名" />
+    <FieldColumn Value="@context?.Email" Title="邮箱" />
+</TTable>
+
+@code
+{
+    Page<User> Page = new Page<User>() { Data = new List<User>() };
+
+    protected override async Task OnInitializedAsync()
+    {
+        Page = await UserService.GetPage(1, 1);
+    }
+}

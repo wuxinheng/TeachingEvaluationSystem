@@ -9,9 +9,9 @@ namespace TeachingEvaluationSystem.DB.Entitys
     public class QuestionBank
     {
         public int Id { get; set; }
-        public string Tile { get; set; }
-        public string Type { get; set; }
-        //public List<OptionBank> OptionBanks { get; set; }
+        public string? Tile { get; set; }
+        public string? Type { get; set; }
+        public List<OptionBank>? OptionBanks { get; set; }
 
     }
 }

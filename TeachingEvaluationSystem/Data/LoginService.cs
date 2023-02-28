@@ -8,21 +8,23 @@ namespace TeachingEvaluationSystem.Data
     public class LoginService
     {
         private readonly TeachingEvaluationSystemDB _dbContext;
-
-        public LoginService(TeachingEvaluationSystemDB dbContext)
+        private readonly GlobalInfo _globalInfo;
+        public LoginService(TeachingEvaluationSystemDB dbContext, GlobalInfo globalInfo)
         {
             _dbContext = dbContext;
+            _globalInfo = globalInfo;
         }
 
-        public async Task<bool> Login(string userName, string password, string validateCode)
+        public async Task<bool> Login(User currUser)
         {
             try
             {
-                var user = await _dbContext.Set<User>().FirstOrDefaultAsync(x => x.Name == userName && x.Password == password);
+                var user = await _dbContext.Set<User>().FirstOrDefaultAsync(x => x.Name == currUser.Name && x.Password == currUser.Password);
                 if (user == null)
                 {
                     return false;
                 }
+                _globalInfo.User=user;
                 return true;
             }
             catch (Exception e)

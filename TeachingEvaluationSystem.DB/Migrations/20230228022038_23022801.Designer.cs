@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TeachingEvaluationSystem.DB;
@@ -11,22 +12,26 @@ using TeachingEvaluationSystem.DB;
 namespace TeachingEvaluationSystem.DB.Migrations
 {
     [DbContext(typeof(TeachingEvaluationSystemDB))]
-    [Migration("20230227065723_23022701")]
-    partial class _23022701
+    [Migration("20230228022038_23022801")]
+    partial class _23022801
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.3");
+            modelBuilder
+                .HasAnnotation("ProductVersion", "7.0.3")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("MenuRole", b =>
                 {
                     b.Property<int>("MenusId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<int>("RolesId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.HasKey("MenusId", "RolesId");
 
@@ -35,17 +40,34 @@ namespace TeachingEvaluationSystem.DB.Migrations
                     b.ToTable("MenuRole");
                 });
 
+            modelBuilder.Entity("RoleUser", b =>
+                {
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("RoleId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("RoleUser");
+                });
+
             modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.Menu", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Route")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -56,17 +78,18 @@ namespace TeachingEvaluationSystem.DB.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsCorrect")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bit");
 
-                    b.Property<int>("QuestionBankId")
-                        .HasColumnType("INTEGER");
+                    b.Property<int?>("QuestionBankId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -79,18 +102,18 @@ namespace TeachingEvaluationSystem.DB.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("RoleId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("Tile")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -103,15 +126,15 @@ namespace TeachingEvaluationSystem.DB.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -122,26 +145,20 @@ namespace TeachingEvaluationSystem.DB.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
 
                     b.ToTable("Users");
                 });
@@ -150,16 +167,18 @@ namespace TeachingEvaluationSystem.DB.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("OptionId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<int>("QuestionId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -181,13 +200,26 @@ namespace TeachingEvaluationSystem.DB.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("RoleUser", b =>
+                {
+                    b.HasOne("TeachingEvaluationSystem.DB.Entitys.Role", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TeachingEvaluationSystem.DB.Entitys.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.OptionBank", b =>
                 {
                     b.HasOne("TeachingEvaluationSystem.DB.Entitys.QuestionBank", "QuestionBank")
                         .WithMany("OptionBanks")
-                        .HasForeignKey("QuestionBankId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("QuestionBankId");
 
                     b.Navigation("QuestionBank");
                 });
@@ -199,17 +231,6 @@ namespace TeachingEvaluationSystem.DB.Migrations
                         .HasForeignKey("RoleId");
                 });
 
-            modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.User", b =>
-                {
-                    b.HasOne("TeachingEvaluationSystem.DB.Entitys.Role", "Role")
-                        .WithMany("Users")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-                });
-
             modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.QuestionBank", b =>
                 {
                     b.Navigation("OptionBanks");
@@ -218,8 +239,6 @@ namespace TeachingEvaluationSystem.DB.Migrations
             modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.Role", b =>
                 {
                     b.Navigation("QuestionBanks");
-
-                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

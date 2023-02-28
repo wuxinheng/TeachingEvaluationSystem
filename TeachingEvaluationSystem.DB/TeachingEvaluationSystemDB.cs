@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.Debug;
+using Microsoft.Extensions.Logging;
 
 using TeachingEvaluationSystem.DB.Entitys;
 
@@ -6,6 +8,8 @@ namespace TeachingEvaluationSystem.DB
 {
     public class TeachingEvaluationSystemDB : Microsoft.EntityFrameworkCore.DbContext
     {
+        public static readonly LoggerFactory LoggerFactory =
+       new LoggerFactory(new[] { new DebugLoggerProvider() });
         public TeachingEvaluationSystemDB()
         {
         }
@@ -19,7 +23,8 @@ namespace TeachingEvaluationSystem.DB
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlite("Data Source=sqlite.db");
+            optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=TeachingEvaluationSystemDB;User ID=sa;Password=123456;TrustServerCertificate=true");
+            optionsBuilder.UseLoggerFactory(LoggerFactory);
         }
     }
 }

@@ -1,28 +1,30 @@
-﻿@inherits LayoutComponentBase
+﻿@using TeachingEvaluationSystem.Data;
+@inherits LayoutComponentBase
+@inject GlobalInfo GlobalInfo
 <div class="page">
-	<div class="sidebar">
-		<NavMenu />
-	</div>
+    <div class="sidebar">
+        <NavMenu />
+    </div>
 
-	<main>
-		<div class="top-row px-4">
-			<TLink OnClick="e=>refCompleteDialog?.Activate()">登录</TLink>
-			<a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-		</div>
-		<article class="content px-4">
-			@Body
-		</article>
-	</main>
+    <main>
+        <div class="top-row px-4">
+            <TLink OnClick="e=>refCompleteDialog?.Activate()">
+                @{
+                    if (GlobalInfo.User == null)
+                    {
+                        var s = "登录";
+                        @s
+                    }
+                    else
+                    {
+                        @GlobalInfo.User.Name
+                    }
+                }
+            </TLink>
+            <a href="https://github.com/wuxinheng/TeachingEvaluationSystem" target="_blank">github</a>
+        </div>
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
 </div>
-<TDialog ref="refCompleteDialog">
-    <HeaderContent>对话框标题</HeaderContent>
-    <ChildContent>对话框的内容</ChildContent>
-    <FooterContent>
-        <TButton Theme="Theme.Primary">确认</TButton>
-		<TButton Type="ButtonType.Outline" OnClick="e=>refCompleteDialog?.Activate(false)">关闭</TButton>
-    </FooterContent>
-</TDialog>
-
-@code {
-	TDialog? refCompleteDialog;
-}

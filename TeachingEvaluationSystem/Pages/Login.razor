@@ -1,31 +1,38 @@
 ﻿@page "/login"
 @using TeachingEvaluationSystem.Data;
+@using Microsoft.AspNetCore.Components.Forms
+
 @inject LoginService LoginService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JS
 
-<form>
-    <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">Email address</label>
-        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-    </div>
-    <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Password</label>
-        <input type="password" class="form-control" id="exampleInputPassword1">
-    </div>
-    <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-        <label class="form-check-label" for="exampleCheck1">Check me out</label>
-    </div>
-    <button class="btn btn-primary" onclick="@Submit()">Submit</button>
-</form>
 
+<div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">用户名</label>
+    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" @bind="@User.Name">
+</div>
+<div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">密码</label>
+    <input type="password" class="form-control" id="exampleInputPassword1" @bind="@User.Password">
+</div>
+<button class="btn btn-primary" @onclick="Submit">登录</button>
 
 @code {
-
-
+    public Login()
+    {
+        User = new DB.Entitys.User();
+    }
+    public TeachingEvaluationSystem.DB.Entitys.User User { get; set; }
     public async Task Submit()
     {
-        var s = await LoginService.Login("", "", "");
-
+        var isExist = await LoginService.Login(User);
+        if (isExist)
+        {
+            NavigationManager.NavigateTo("/", false);
+        }
+        else
+        {
+           await JS.InvokeVoidAsync("alert","账号密码不正确！");
+        }
     }
 }

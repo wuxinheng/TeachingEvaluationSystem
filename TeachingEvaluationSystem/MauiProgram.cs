@@ -24,6 +24,8 @@ public static class MauiProgram
         builder.Services.AddDbContext<TeachingEvaluationSystemDB>();
         builder.Services.AddSingleton<WeatherForecastService>();
         builder.Services.AddSingleton<LoginService>();
+        builder.Services.AddSingleton<UserService>();
+        builder.Services.AddSingleton<GlobalInfo>();
         builder.Services.AddTDesign();
         return builder.Build();
     }
