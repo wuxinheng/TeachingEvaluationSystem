@@ -1,37 +1,36 @@
-﻿@page "/user/index"
+﻿@page "/menu/index"
 @using TeachingEvaluationSystem.Data;
 @using TeachingEvaluationSystem.DB.Entitys;
 @using TeachingEvaluationSystem.Comom;
-@inject UserService UserService
+@inject MenuService MenuService
 @inject IJSRuntime JS
 @inject NavigationManager NavigationManager
 
-<TButton Theme="Theme.Primary" Size="Size.Small" OnClick='e=>NavigationManager.NavigateTo($"/user/edit")'>新增</TButton>
-<TTable TItem="User" Data="@Page?.Data" Striped>
+<TButton Theme="Theme.Primary" Size="Size.Small" OnClick='e=>NavigationManager.NavigateTo($"/menu/edit")'>新增</TButton>
+<TTable TItem="Menu" Data="@Page?.Data" Striped>
     <FieldColumn Value="@context?.Id" Title="Id" />
-    <FieldColumn Value="@context?.Name" Title="姓名" />
-    <FieldColumn Value="@context?.Role?.Name" Title="角色" />
-    <FieldColumn Value="@context?.Email" Title="邮箱" />
+    <FieldColumn Value="@context?.Name" Title="名称" />
+    <FieldColumn Value="@context?.Route" Title="路由" />
     <FieldColumn Title="操作">
         <TButton Theme="Theme.Danger" Size="Size.Small" OnClick="e=>Delete(context)">删除</TButton>
-        <TButton Theme="Theme.Primary" Size="Size.Small" OnClick='e=>NavigationManager.NavigateTo($"/user/edit/{context?.Id}")'>编辑</TButton>
+        <TButton Theme="Theme.Primary" Size="Size.Small" OnClick='e=>NavigationManager.NavigateTo($"/menu/edit/{context?.Id}")'>编辑</TButton>
     </FieldColumn>
 </TTable>
 
 
 @code
 {
-    public Page<User> Page = new Page<User>() { Data = new List<User>() };
+    public Page<Menu> Page = new Page<Menu>() { Data = new List<Menu>() };
 
 
     protected override async Task OnInitializedAsync()
     {
-        Page = await UserService.GetPage(1, 10000);
+        Page = await MenuService.GetPage(1, 10000);
     }
 
-    private async Task Delete(User user)
+    private async Task Delete(Menu role)
     {
-        if (user.Name == "admin")
+        if (role.Name == "admin")
         {
             await JS.InvokeAsync<bool>("alert", "禁止删除系统管理员！");
             await OnInitializedAsync();
@@ -41,7 +40,7 @@
         if (confirm)
         {
 
-            await UserService.Detele(user);
+            await MenuService.Detele(role);
             await OnInitializedAsync();
         }
     }

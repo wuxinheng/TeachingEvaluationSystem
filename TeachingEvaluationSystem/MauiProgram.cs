@@ -22,10 +22,11 @@ public static class MauiProgram
         builder.Services.AddBlazorWebViewDeveloperTools();
 #endif
         builder.Services.AddDbContext<TeachingEvaluationSystemDB>();
-        builder.Services.AddSingleton<WeatherForecastService>();
         builder.Services.AddSingleton<LoginService>();
-        builder.Services.AddSingleton<UserService>();
-        builder.Services.AddSingleton<GlobalInfo>();
+        builder.Services.AddSingleton<UserService>(); 
+        builder.Services.AddSingleton<RoleService>(); 
+        builder.Services.AddSingleton<MenuService>(); 
+        builder.Services.AddSingleton<GlobalInfo>(); 
         builder.Services.AddTDesign();
         return builder.Build();
     }

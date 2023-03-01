@@ -20,8 +20,22 @@ namespace TeachingEvaluationSystem.DB
                     Email="123@qq.com",
                     Password="admin"
                 });
-                this.SaveChanges();
+               
             }
+            if (Menus.Count()==0)
+            {
+                var menus = new List<Menu>
+                {
+                    new() { Name = "主页", Route = @$"" },
+                    new() { Name = "登录", Route = @$"login" },
+                    new() { Name = "用户", Route = @$"user/index" },
+                    new() { Name = "菜单", Route = @$"role/index" },
+                    new() { Name = "角色", Route = @$"menu/index" },
+                };
+                Menus.AddRange(menus);
+            }
+            this.SaveChanges();
+            
         }
         public DbSet<Menu> Menus { get; set; }
         public DbSet<OptionBank> OptionBanks { get; set; }
@@ -33,12 +47,16 @@ namespace TeachingEvaluationSystem.DB
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            //optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=TeachingEvaluationSystemDB;User ID=sa;Password=123456;TrustServerCertificate=true");
-            optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=TeachingEvaluationSystemDB;Integrated Security=True;TrustServerCertificate=true");
+            optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=TeachingEvaluationSystemDB;User ID=sa;Password=123456;TrustServerCertificate=true");
+            //optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=TeachingEvaluationSystemDB;Integrated Security=True;TrustServerCertificate=true");
 
             optionsBuilder.UseLoggerFactory(LoggerFactory);
         }
 
-        
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Role>().Navigation(e => e.Menus).AutoInclude(); ;
+        }
+
     }
 }

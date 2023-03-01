@@ -12,7 +12,7 @@ namespace TeachingEvaluationSystem.DB.Entitys
         public string? Name { get; set; }
         public string? Description { get; set; }
         public List<Menu>? Menus { get; set; }
-        public List<User>? Users { get; set; }
-        public List<QuestionBank>? QuestionBanks { get; set; }
+        //public List<Role>? Users { get; set; }
+        //public List<QuestionBank>? QuestionBanks { get; set; }
     }
 }

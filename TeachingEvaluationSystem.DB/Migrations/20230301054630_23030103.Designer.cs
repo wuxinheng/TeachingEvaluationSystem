@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TeachingEvaluationSystem.DB;
 
@@ -11,9 +12,10 @@ using TeachingEvaluationSystem.DB;
 namespace TeachingEvaluationSystem.DB.Migrations
 {
     [DbContext(typeof(TeachingEvaluationSystemDB))]
-    partial class TeachingEvaluationSystemDBModelSnapshot : ModelSnapshot
+    [Migration("20230301054630_23030103")]
+    partial class _23030103
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +23,6 @@ namespace TeachingEvaluationSystem.DB.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("MenuRole", b =>
-                {
-                    b.Property<int>("MenusId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RolesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("MenusId", "RolesId");
-
-                    b.HasIndex("RolesId");
-
-                    b.ToTable("MenuRole");
-                });
 
             modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.Menu", b =>
                 {
@@ -110,10 +97,15 @@ namespace TeachingEvaluationSystem.DB.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("MenuId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MenuId");
 
                     b.ToTable("Roles");
                 });
@@ -167,21 +159,6 @@ namespace TeachingEvaluationSystem.DB.Migrations
                     b.ToTable("UserAnswers");
                 });
 
-            modelBuilder.Entity("MenuRole", b =>
-                {
-                    b.HasOne("TeachingEvaluationSystem.DB.Entitys.Menu", null)
-                        .WithMany()
-                        .HasForeignKey("MenusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TeachingEvaluationSystem.DB.Entitys.Role", null)
-                        .WithMany()
-                        .HasForeignKey("RolesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.OptionBank", b =>
                 {
                     b.HasOne("TeachingEvaluationSystem.DB.Entitys.QuestionBank", "QuestionBank")
@@ -189,6 +166,13 @@ namespace TeachingEvaluationSystem.DB.Migrations
                         .HasForeignKey("QuestionBankId");
 
                     b.Navigation("QuestionBank");
+                });
+
+            modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.Role", b =>
+                {
+                    b.HasOne("TeachingEvaluationSystem.DB.Entitys.Menu", null)
+                        .WithMany("Roles")
+                        .HasForeignKey("MenuId");
                 });
 
             modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.User", b =>
@@ -200,6 +184,11 @@ namespace TeachingEvaluationSystem.DB.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.Menu", b =>
+                {
+                    b.Navigation("Roles");
                 });
 
             modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.QuestionBank", b =>

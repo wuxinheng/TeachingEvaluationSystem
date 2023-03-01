@@ -1,5 +1,96 @@
-﻿@page "/user/edit"
+﻿@page "/user/edit/{id?}"
+@using TeachingEvaluationSystem.Data;
+@using Microsoft.AspNetCore.Components.Forms
+
+@inject UserService UserService
+@inject RoleService RoleService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JS
+
+<div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">用户名</label>
+    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" @bind="@User.Name">
+</div>
+<div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">邮箱</label>
+    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" @bind="@User.Email">
+</div>
+<div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">角色</label>
+    <select class="form-select" aria-label="Default select example" @bind="@User.RoleId">
+        @if (Roles!=null)
+        {
+            @foreach (var item in Roles)
+            {
+                if (User.RoleId == item?.Id)
+                {
+                    <option value="@item?.Id" selected>@item?.Name</option>
+                }
+                else
+                {
+                    <option value="@item?.Id">@item?.Name</option>
+                }
+            }
+        }
+        
+    </select>
+</div>
+
+<div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">密码</label>
+    <input type="password" class="form-control" id="exampleInputPassword1" @bind="@User.Password">
+</div>
+<div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">确认密码</label>
+    <input type="password" class="form-control" id="exampleInputPassword1" @bind="@ConfirmPassword">
+</div>
+<button class="btn btn-primary" @onclick="Save">保存</button>
 
 @code {
 
+    [Parameter]
+    public string? Id { get; set; }
+
+    public string? ConfirmPassword { get; set; }
+
+    public Edit()
+    {
+        User = new DB.Entitys.User();
+    }
+    public TeachingEvaluationSystem.DB.Entitys.User? User { get; set; }
+    public List<TeachingEvaluationSystem.DB.Entitys.Role>? Roles { get; set; }
+
+    public async Task Save()
+    {
+        if (ConfirmPassword != User.Password)
+        {
+            await JS.InvokeVoidAsync("alert", "两次密码不一致！");
+        }
+        else
+        {
+            var isSuccess = await UserService.Save(User);
+            if (isSuccess)
+            {
+                await JS.InvokeVoidAsync("alert", "保存成功！");
+                NavigationManager.NavigateTo("/user/index", false);
+            }
+            else
+            {
+                await JS.InvokeVoidAsync("alert", "保存失败！");
+            }
+        }
+
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var id = string.IsNullOrWhiteSpace(Id) ? 0 : int.Parse(Id);
+        User = await UserService.Get(id);
+        if (User == null)
+        {
+            User = new DB.Entitys.User();
+        }
+        ConfirmPassword = User?.Password;
+        Roles =await RoleService.GetList();
+    }
 }
