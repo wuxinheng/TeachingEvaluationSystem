@@ -47,8 +47,8 @@ namespace TeachingEvaluationSystem.DB
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=TeachingEvaluationSystemDB;User ID=sa;Password=123456;TrustServerCertificate=true");
-            //optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=TeachingEvaluationSystemDB;Integrated Security=True;TrustServerCertificate=true");
+            //optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=TeachingEvaluationSystemDB;User ID=sa;Password=123456;TrustServerCertificate=true");
+            optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=TeachingEvaluationSystemDB;Integrated Security=True;TrustServerCertificate=true");
 
             optionsBuilder.UseLoggerFactory(LoggerFactory);
         }
