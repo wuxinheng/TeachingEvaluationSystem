@@ -8,21 +8,41 @@ namespace TeachingEvaluationSystem.DB
 {
     public class TeachingEvaluationSystemDB : Microsoft.EntityFrameworkCore.DbContext
     {
+        public TeachingEvaluationSystemDB(DbContextOptions<TeachingEvaluationSystemDB> options)
+        : base(options)
+        {
+            DataInit();
+        }
         public static readonly LoggerFactory LoggerFactory =
        new LoggerFactory(new[] { new DebugLoggerProvider() });
         public TeachingEvaluationSystemDB()
         {
-            if (Users.Count()==0)
+            DataInit();
+
+
+        }
+        private void DataInit() {
+            if (Roles.Count() == 0)
+            {
+                Roles.Add(new Role()
+                {
+                    Name = "管理员",
+                    Description="系统管理员"
+                });
+
+            }
+            if (Users.Count() == 0)
             {
                 Users.Add(new User()
                 {
-                    Name="admin",
-                    Email="123@qq.com",
-                    Password="admin"
+                    Name = "admin",
+                    Email = "123@qq.com",
+                    Password = "admin",
+                    RoleId= 1,
                 });
-               
+
             }
-            if (Menus.Count()==0)
+            if (Menus.Count() == 0)
             {
                 var menus = new List<Menu>
                 {
@@ -35,7 +55,6 @@ namespace TeachingEvaluationSystem.DB
                 Menus.AddRange(menus);
             }
             this.SaveChanges();
-            
         }
         public DbSet<Menu> Menus { get; set; }
         public DbSet<OptionBank> OptionBanks { get; set; }
@@ -43,6 +62,7 @@ namespace TeachingEvaluationSystem.DB
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserAnswer> UserAnswers { get; set; }
+        public DbSet<Class> Classes { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -3,6 +3,7 @@
 using TeachingEvaluationSystem.Data;
 using TeachingEvaluationSystem.DB;
 
+
 namespace TeachingEvaluationSystem;
 
 public static class MauiProgram
@@ -26,7 +27,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<UserService>(); 
         builder.Services.AddSingleton<RoleService>(); 
         builder.Services.AddSingleton<MenuService>(); 
-        builder.Services.AddSingleton<GlobalInfo>(); 
+        builder.Services.AddSingleton<ClassService>(); 
+        builder.Services.AddSingleton<GlobalInfo>();
         builder.Services.AddTDesign();
         return builder.Build();
     }

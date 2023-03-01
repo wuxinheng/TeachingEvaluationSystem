@@ -1,0 +1,53 @@
+﻿@page "/class/edit/{id?}"
+@using TeachingEvaluationSystem.Data;
+@using Microsoft.AspNetCore.Components.Forms
+
+@inject ClassService ClassService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JS
+
+<div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">名称</label>
+    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" @bind="@Class.Name">
+</div>
+<div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">路由</label>
+    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" @bind="@Class.Description">
+</div>
+<button class="btn btn-primary" @onclick="Save">保存</button>
+
+@code {
+
+    [Parameter]
+    public string? Id { get; set; }
+    public Edit()
+    {
+        Class = new DB.Entitys.Class();
+    }
+    public TeachingEvaluationSystem.DB.Entitys.Class? Class { get; set; }
+
+    public async Task Save()
+    {
+        var isSuccess = await ClassService.Save(Class);
+        if (isSuccess)
+        {
+            await JS.InvokeVoidAsync("alert", "保存成功！");
+            NavigationManager.NavigateTo("/class/index", false);
+        }
+        else
+        {
+            await JS.InvokeVoidAsync("alert", "保存失败！");
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var id = string.IsNullOrWhiteSpace(Id) ? 0 : int.Parse(Id);
+        Class = await ClassService.Get(id);
+        if (Class == null)
+        {
+            Class = new DB.Entitys.Class();
+        }
+
+    }
+}
