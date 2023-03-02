@@ -1,0 +1,151 @@
+﻿@page "/class/member/{id?}/{type?}/{operate?}"
+
+@using TeachingEvaluationSystem.Data;
+@using TeachingEvaluationSystem.DB.Entitys;
+@using TeachingEvaluationSystem.Comom;
+@inject ClassService ClassService
+@inject UserService UserService
+@inject RoleService RoleService
+@inject IJSRuntime JS
+@inject NavigationManager NavigationManager
+
+@if (string.IsNullOrWhiteSpace(Operate))
+{
+    <TButton Theme="Theme.Primary" Size="Size.Small" OnClick='e=>NavigationManager.NavigateTo("/class/index")'>返回</TButton>
+    <TButton Theme="Theme.Primary" Size="Size.Small" OnClick='e=>AddOperate()'>新增</TButton>
+    <TButton Theme="Theme.Primary" Size="Size.Small" OnClick='e=>Delete()'>删除</TButton>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Id</th>
+            <th scope="col">姓名</th>
+            <th scope="col">邮箱</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Users)
+        {
+            <tr>
+                <td>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" @bind="@item.Check" id="flexCheckDefault">
+                    </div>
+                </td>
+                <td>@item?.Id</td>
+                <td>@item?.Name</td>
+                <td>@item?.Email</td>
+            </tr>
+        }
+    </tbody>
+</table>
+@if (!string.IsNullOrWhiteSpace(Operate))
+{
+    <TButton Theme="Theme.Primary" Size="Size.Small" OnClick='e=>Add()'>保存</TButton>
+    <TButton Theme="Theme.Primary" Size="Size.Small" OnClick='e=>PreviousPage()'>返回</TButton>
+}
+
+
+@code
+{
+    [Parameter]
+    public string? Id { get; set; }
+    [Parameter]
+    public string? @Type { get; set; }
+    [Parameter]
+    public string? Operate { get; set; }
+
+    public List<User> Users { get; set; } = new List<User>();
+    public Class @Class = new Class();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var id = int.Parse(Id);
+        var @class = await ClassService.Get(id);
+        Class = @class;
+        if (string.IsNullOrWhiteSpace(Operate))
+        {
+            if (Type == "0")
+            {
+                Users = @class.Students;
+            }
+            else
+            {
+                Users = @class.Teachers.Select(x => x.User).ToList();
+            }
+        }
+        else
+        {
+            var roles = await RoleService.GetList();
+            if (Type == "0")
+            {
+                Users = await UserService.GetUsers(roles.FirstOrDefault(x => x.Name == "学生")?.Id ?? 0);
+            }
+            else
+            {
+                Users = await UserService.GetUsers(roles.FirstOrDefault(x => x.Name == "老师")?.Id ?? 0);
+            }
+        }
+    }
+
+    private async Task Delete()
+    {
+        var confirm = await JS.InvokeAsync<bool>("confirm", new string?[] { "您确定要删除吗？" });
+        if (confirm)
+        {
+            if (Type == "0")
+            {
+                foreach (var item in Users.Where(x => x.Check).ToList())
+                {
+                    Class.Students.Remove(item);
+                }
+            }
+            else
+            {
+                foreach (var item in Users.Where(x => x.Check).ToList())
+                {
+                    Class.Teachers.Remove(new UserClass() { ClassesId = Class.Id, UserId = item.Id });
+                }
+
+            }
+
+            await ClassService.Save(Class);
+            await OnInitializedAsync();
+        }
+    }
+
+    private async Task AddOperate()
+    {
+        Operate = "1";
+        await OnInitializedAsync();
+    }
+
+    private async Task Add()
+    {
+        if (!string.IsNullOrWhiteSpace(Operate))
+        {
+            if (Type == "0")
+            {
+                Class.Students = Users.Where(x => x.Check).ToList();
+            }
+            else
+            {
+                foreach (var item in Users.Where(x => x.Check).ToList())
+                {
+                    Class.Teachers.Add(new UserClass() { UserId = item.Id, ClassesId = Class.Id });
+                }
+            }
+        }
+        await ClassService.Save(Class);
+        Operate = null;
+        await OnInitializedAsync();
+    }
+
+    private async Task PreviousPage()
+    {
+        Operate = null;
+        await OnInitializedAsync();
+    }
+}

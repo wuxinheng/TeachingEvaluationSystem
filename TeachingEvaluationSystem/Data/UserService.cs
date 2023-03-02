@@ -35,6 +35,12 @@ namespace TeachingEvaluationSystem.Data
             return Task.FromResult(page);
         }
 
+        public async Task<List<User>> GetUsers(int roleId)
+        {
+            var users = await _dbContext.Set<User>().Where(x => x.RoleId == roleId).ToListAsync();
+            return users;
+        }
+
         public async Task<User> Get(int id)
         {
             var users = await _dbContext.Set<User>().FirstOrDefaultAsync(x => x.Id == id);

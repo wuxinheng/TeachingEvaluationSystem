@@ -5,11 +5,25 @@
 namespace TeachingEvaluationSystem.DB.Migrations
 {
     /// <inheritdoc />
-    public partial class _23030101 : Migration
+    public partial class _23030201 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Classes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Classes", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Menus",
                 columns: table => new
@@ -120,17 +134,46 @@ namespace TeachingEvaluationSystem.DB.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RoleId = table.Column<int>(type: "int", nullable: false)
+                    RoleId = table.Column<int>(type: "int", nullable: true),
+                    ClassId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Users_Classes_ClassId",
+                        column: x => x.ClassId,
+                        principalTable: "Classes",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Users_Roles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Roles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserClasses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ClassesId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserClasses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserClasses_Classes_ClassesId",
+                        column: x => x.ClassesId,
+                        principalTable: "Classes",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_UserClasses_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -142,6 +185,21 @@ namespace TeachingEvaluationSystem.DB.Migrations
                 name: "IX_OptionBanks_QuestionBankId",
                 table: "OptionBanks",
                 column: "QuestionBankId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserClasses_ClassesId",
+                table: "UserClasses",
+                column: "ClassesId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserClasses_UserId",
+                table: "UserClasses",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_ClassId",
+                table: "Users",
+                column: "ClassId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_RoleId",
@@ -162,13 +220,19 @@ namespace TeachingEvaluationSystem.DB.Migrations
                 name: "UserAnswers");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "UserClasses");
 
             migrationBuilder.DropTable(
                 name: "Menus");
 
             migrationBuilder.DropTable(
                 name: "QuestionBanks");
+
+            migrationBuilder.DropTable(
+                name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Classes");
 
             migrationBuilder.DropTable(
                 name: "Roles");

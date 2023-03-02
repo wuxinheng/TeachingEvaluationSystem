@@ -9,10 +9,14 @@ namespace TeachingEvaluationSystem.DB.Entitys
 {
     public class Menu
     {
+        public Menu()
+        {
+            Roles = new List<Role>();
+        }
         public int Id { get; set; }
         public string? Name { get; set; }
         public string? Route { get; set; }
-        public List<Role>? Roles { get; set; }
+        public virtual List<Role> Roles { get; set; }
         [NotMapped]
         public bool Check { get; set; } = false;
     }
