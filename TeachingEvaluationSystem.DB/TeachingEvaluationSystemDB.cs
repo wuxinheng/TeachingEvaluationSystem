@@ -23,6 +23,9 @@ namespace TeachingEvaluationSystem.DB
 
         private void DataInit()
         {
+            #region DataInit
+
+            
             if (Roles.Count() == 0)
             {
                 var roles = new List<Role>
@@ -57,6 +60,7 @@ namespace TeachingEvaluationSystem.DB
                 Menus.AddRange(menus);
             }
             this.SaveChanges();
+            #endregion
         }
         public DbSet<Menu> Menus { get; set; }
         public DbSet<Role> Roles { get; set; }

@@ -78,8 +78,7 @@
             }
             else
             {
-                // TODO 未完
-                //Users = await UserClassesService.GetUsers(@class.Id);
+                Users = @class.Teachers.Select(x => x.User).ToList() ;
             }
         }
         else

@@ -5,7 +5,7 @@
 namespace TeachingEvaluationSystem.DB.Migrations
 {
     /// <inheritdoc />
-    public partial class _23030201 : Migration
+    public partial class _2302020101 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
