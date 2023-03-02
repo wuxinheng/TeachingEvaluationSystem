@@ -81,6 +81,8 @@ namespace TeachingEvaluationSystem.DB
             modelBuilder.Entity<Role>().Navigation(e => e.Menus).AutoInclude();
             modelBuilder.Entity<Class>().Navigation(e => e.Students).AutoInclude();
             modelBuilder.Entity<Class>().Navigation(e => e.Teachers).AutoInclude();
+            modelBuilder.Entity<UserClass>().Navigation(e => e.User).AutoInclude();
+            modelBuilder.Entity<UserClass>().Navigation(e => e.Classes).AutoInclude();
         }
 
     }

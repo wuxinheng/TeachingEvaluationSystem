@@ -5,7 +5,9 @@
 @using TeachingEvaluationSystem.Comom;
 @inject ClassService ClassService
 @inject UserService UserService
+@inject UserClassesService UserClassesService
 @inject RoleService RoleService
+
 @inject IJSRuntime JS
 @inject NavigationManager NavigationManager
 
@@ -26,18 +28,21 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Users)
+        @if (Users != null)
         {
-            <tr>
-                <td>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" @bind="@item.Check" id="flexCheckDefault">
-                    </div>
-                </td>
-                <td>@item?.Id</td>
-                <td>@item?.Name</td>
-                <td>@item?.Email</td>
-            </tr>
+            @foreach (var item in Users)
+            {
+                <tr>
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" @bind="@item.Check" id="flexCheckDefault">
+                        </div>
+                    </td>
+                    <td>@item?.Id</td>
+                    <td>@item?.Name</td>
+                    <td>@item?.Email</td>
+                </tr>
+            }
         }
     </tbody>
 </table>
@@ -73,19 +78,21 @@
             }
             else
             {
-                Users = @class.Teachers.Select(x => x.User).ToList();
+                // TODO 未完
+                //Users = await UserClassesService.GetUsers(@class.Id);
             }
         }
         else
         {
             var roles = await RoleService.GetList();
+            var userIds = Users.Select(x => x.Id).ToList();
             if (Type == "0")
             {
-                Users = await UserService.GetUsers(roles.FirstOrDefault(x => x.Name == "学生")?.Id ?? 0);
+                Users = await UserService.GetUsers(roles.FirstOrDefault(x => x.Name == "学生")?.Id ?? 0, userIds);
             }
             else
             {
-                Users = await UserService.GetUsers(roles.FirstOrDefault(x => x.Name == "老师")?.Id ?? 0);
+                Users = await UserService.GetUsers(roles.FirstOrDefault(x => x.Name == "老师")?.Id ?? 0, userIds);
             }
         }
     }

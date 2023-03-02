@@ -28,7 +28,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<RoleService>(); 
         builder.Services.AddSingleton<MenuService>(); 
         builder.Services.AddSingleton<ClassService>(); 
-        builder.Services.AddSingleton<GlobalInfo>();
+        builder.Services.AddSingleton<UserClassesService>(); 
+        builder.Services.AddSingleton<GlobalInfo>(); 
         builder.Services.AddTDesign();
         return builder.Build();
     }
