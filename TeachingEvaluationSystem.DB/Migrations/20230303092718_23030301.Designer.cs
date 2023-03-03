@@ -12,8 +12,8 @@ using TeachingEvaluationSystem.DB;
 namespace TeachingEvaluationSystem.DB.Migrations
 {
     [DbContext(typeof(TeachingEvaluationSystemDB))]
-    [Migration("20230302121223_2302020101")]
-    partial class _2302020101
+    [Migration("20230303092718_23030301")]
+    partial class _23030301
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -89,11 +89,11 @@ namespace TeachingEvaluationSystem.DB.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsCorrect")
-                        .HasColumnType("bit");
-
                     b.Property<int?>("QuestionBankId")
                         .HasColumnType("int");
+
+                    b.Property<double>("Weight")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
