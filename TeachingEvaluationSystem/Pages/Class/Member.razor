@@ -25,6 +25,10 @@
             <th scope="col">Id</th>
             <th scope="col">姓名</th>
             <th scope="col">邮箱</th>
+            @if (string.IsNullOrWhiteSpace(Operate) && Type == "1")
+            {
+                <th scope="col">操作</th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -41,6 +45,10 @@
                     <td>@item?.Id</td>
                     <td>@item?.Name</td>
                     <td>@item?.Email</td>
+                    @if (string.IsNullOrWhiteSpace(Operate) && Type == "1")
+                    {
+                        <td><TButton Theme="Theme.Primary" Size="Size.Small" OnClick='e=>NavigationManager.NavigateTo($"/userclasspage/edit/{item?.UserClasses.Find(x=>x.ClassesId.ToString()==Id).ClassesId}")'>设置学科</TButton></td>
+                    }
                 </tr>
             }
         }
@@ -78,7 +86,7 @@
             }
             else
             {
-                Users = @class.Teachers.Select(x => x.User).ToList() ;
+                Users = @class.Teachers.Select(x => x.User).ToList();
             }
         }
         else
@@ -154,4 +162,6 @@
         Operate = null;
         await OnInitializedAsync();
     }
+
+
 }

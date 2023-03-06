@@ -1,0 +1,41 @@
+﻿@page "/questiontype/index"
+@using TeachingEvaluationSystem.Data;
+@using TeachingEvaluationSystem.DB.Entitys;
+@using TeachingEvaluationSystem.Comom;
+@inject QuestionTypeService QuestionTypeService
+@inject IJSRuntime JS
+@inject NavigationManager NavigationManager
+
+<TButton Theme="Theme.Primary" Size="Size.Small" OnClick='e=>NavigationManager.NavigateTo($"/questiontype/edit")'>新增</TButton>
+<TTable TItem="QuestionType" Data="@Page?.Data" Striped>
+    <FieldColumn Value="@context?.Id" Title="Id" />
+    <FieldColumn Value="@context?.Name" Title="名称" />
+    <FieldColumn Value="@context?.Weight" Title="权重" />
+    <FieldColumn Title="操作">
+        <TButton Theme="Theme.Danger" Size="Size.Small" OnClick="e=>Delete(context)">删除</TButton>
+        <TButton Theme="Theme.Primary" Size="Size.Small" OnClick='e=>NavigationManager.NavigateTo($"/questiontype/edit/{context?.Id}")'>编辑</TButton>
+    </FieldColumn>
+</TTable>
+
+
+@code
+{
+    public Page<QuestionType> Page = new Page<QuestionType>() { Data = new List<QuestionType>() };
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Page = await QuestionTypeService.GetPage(1, 10000);
+    }
+
+    private async Task Delete(QuestionType role)
+    {
+
+        var confirm = await JS.InvokeAsync<bool>("confirm", new string?[] { "您确定要删除吗？" });
+        if (confirm)
+        {
+            await QuestionTypeService.Detele(role);
+            await OnInitializedAsync();
+        }
+    }
+}

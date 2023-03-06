@@ -1,0 +1,56 @@
+﻿@page "/subjectpage/edit/{id?}"
+@using TeachingEvaluationSystem.Data;
+@using Microsoft.AspNetCore.Components.Forms
+
+@inject SubjectService SubjectService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JS
+
+<div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">用户名</label>
+    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" @bind="@Subject.Name">
+</div>
+
+<button class="btn btn-primary" @onclick="Save">保存</button>
+
+@code {
+
+    [Parameter]
+    public string? Id { get; set; }
+
+    public string? ConfirmPassword { get; set; }
+
+    public Edit()
+    {
+        Subject = new DB.Entitys.Subject();
+    }
+    public TeachingEvaluationSystem.DB.Entitys.Subject? Subject { get; set; }
+
+    public async Task Save()
+    {
+
+        var isSuccess = await SubjectService.Save(Subject);
+        if (isSuccess)
+        {
+            await JS.InvokeVoidAsync("alert", "保存成功！");
+            NavigationManager.NavigateTo("/subjectpage/index", false);
+        }
+        else
+        {
+            await JS.InvokeVoidAsync("alert", "保存失败！");
+        }
+
+
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var id = string.IsNullOrWhiteSpace(Id) ? 0 : int.Parse(Id);
+        Subject = await SubjectService.Get(id);
+        if (Subject == null)
+        {
+            Subject = new DB.Entitys.Subject();
+        }
+
+    }
+}

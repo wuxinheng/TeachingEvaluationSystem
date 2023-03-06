@@ -77,6 +77,10 @@ namespace TeachingEvaluationSystem.Data
 
         public async Task<bool> Save(List<QuestionBank> questions)
         {
+            try
+            {
+
+            
             foreach (var item in questions)
             {
                 var dbquestion = await _dbContext.Set<QuestionBank>().FirstOrDefaultAsync(x => x.Id == item.Id);
@@ -93,6 +97,12 @@ namespace TeachingEvaluationSystem.Data
             }
             var count = await _dbContext.SaveChangesAsync();
             return count > 0;
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
         }
     }
 }

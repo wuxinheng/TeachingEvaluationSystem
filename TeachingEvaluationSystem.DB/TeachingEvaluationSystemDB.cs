@@ -23,44 +23,44 @@ namespace TeachingEvaluationSystem.DB
 
         private void DataInit()
         {
-            #region DataInit
+            //#region DataInit
 
             
-            if (Roles.Count() == 0)
-            {
-                var roles = new List<Role>
-                {
-                    new (){Name = "管理员",Description = "系统管理员"},
-                    new (){Name = "老师",Description = "被评价对象"},
-                    new (){Name = "学生",Description = "评价主体"},
-                };
-                Roles.AddRange(roles);
-            }
-            if (Users.Count() == 0)
-            {
-                Users.Add(new User()
-                {
-                    Name = "admin",
-                    Email = "123@qq.com",
-                    Password = "admin",
-                    RoleId = 1,
-                });
+            //if (Roles.Count() == 0)
+            //{
+            //    var roles = new List<Role>
+            //    {
+            //        new (){Name = "管理员",Description = "系统管理员"},
+            //        new (){Name = "老师",Description = "被评价对象"},
+            //        new (){Name = "学生",Description = "评价主体"},
+            //    };
+            //    Roles.AddRange(roles);
+            //}
+            //if (Users.Count() == 0)
+            //{
+            //    Users.Add(new User()
+            //    {
+            //        Name = "admin",
+            //        Email = "123@qq.com",
+            //        Password = "admin",
+            //        RoleId = 1,
+            //    });
 
-            }
-            if (Menus.Count() == 0)
-            {
-                var menus = new List<Menu>
-                {
-                    new() { Name = "主页", Route = @$"" },
-                    new() { Name = "登录", Route = @$"login" },
-                    new() { Name = "用户", Route = @$"user/index" },
-                    new() { Name = "菜单", Route = @$"role/index" },
-                    new() { Name = "角色", Route = @$"menu/index" },
-                };
-                Menus.AddRange(menus);
-            }
-            this.SaveChanges();
-            #endregion
+            //}
+            //if (Menus.Count() == 0)
+            //{
+            //    var menus = new List<Menu>
+            //    {
+            //        new() { Name = "主页", Route = @$"" },
+            //        new() { Name = "登录", Route = @$"login" },
+            //        new() { Name = "用户", Route = @$"user/index" },
+            //        new() { Name = "菜单", Route = @$"role/index" },
+            //        new() { Name = "角色", Route = @$"menu/index" },
+            //    };
+            //    Menus.AddRange(menus);
+            //}
+            //this.SaveChanges();
+            //#endregion
         }
         public DbSet<Menu> Menus { get; set; }
         public DbSet<Role> Roles { get; set; }
@@ -87,7 +87,9 @@ namespace TeachingEvaluationSystem.DB
             modelBuilder.Entity<Class>().Navigation(e => e.Teachers).AutoInclude();
             modelBuilder.Entity<UserClass>().Navigation(e => e.User).AutoInclude();
             modelBuilder.Entity<UserClass>().Navigation(e => e.Classes).AutoInclude();
+            modelBuilder.Entity<UserClass>().Navigation(e => e.Subjects).AutoInclude();
             modelBuilder.Entity<QuestionBank>().Navigation(e => e.OptionBanks).AutoInclude();
+            modelBuilder.Entity<QuestionBank>().Navigation(e => e.QuestionType).AutoInclude();
         }
 
     }

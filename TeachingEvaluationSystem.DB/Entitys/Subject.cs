@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace TeachingEvaluationSystem.DB.Entitys
 {
-    public class UserAnswer : BaseEntity
+    public class Subject : BaseEntity
     {
-        public int UserId { get; set; }
-        public int OptionId { get; set; }
-        public int QuestionId { get; set; }
+        public string? Name { get; set; }
     }
 }

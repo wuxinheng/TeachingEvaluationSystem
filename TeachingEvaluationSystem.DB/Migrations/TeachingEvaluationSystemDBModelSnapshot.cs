@@ -124,16 +124,38 @@ namespace TeachingEvaluationSystem.DB.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("QuestionTypeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Tile")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Type")
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionTypeId");
+
+                    b.ToTable("QuestionBanks");
+                });
+
+            modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.QuestionType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Weight")
+                        .IsRequired()
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
-                    b.ToTable("QuestionBanks");
+                    b.ToTable("QuestionType");
                 });
 
             modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.Role", b =>
@@ -153,6 +175,27 @@ namespace TeachingEvaluationSystem.DB.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.Subject", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UserClassId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserClassId");
+
+                    b.ToTable("Subject");
                 });
 
             modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.User", b =>
@@ -271,6 +314,24 @@ namespace TeachingEvaluationSystem.DB.Migrations
                     b.Navigation("QuestionBank");
                 });
 
+            modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.QuestionBank", b =>
+                {
+                    b.HasOne("TeachingEvaluationSystem.DB.Entitys.QuestionType", "QuestionType")
+                        .WithMany()
+                        .HasForeignKey("QuestionTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("QuestionType");
+                });
+
+            modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.Subject", b =>
+                {
+                    b.HasOne("TeachingEvaluationSystem.DB.Entitys.UserClass", null)
+                        .WithMany("Subjects")
+                        .HasForeignKey("UserClassId");
+                });
+
             modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.User", b =>
                 {
                     b.HasOne("TeachingEvaluationSystem.DB.Entitys.Class", "Class")
@@ -316,6 +377,11 @@ namespace TeachingEvaluationSystem.DB.Migrations
             modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.User", b =>
                 {
                     b.Navigation("UserClasses");
+                });
+
+            modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.UserClass", b =>
+                {
+                    b.Navigation("Subjects");
                 });
 #pragma warning restore 612, 618
         }

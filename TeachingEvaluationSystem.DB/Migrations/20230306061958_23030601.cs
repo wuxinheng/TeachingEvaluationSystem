@@ -5,7 +5,7 @@
 namespace TeachingEvaluationSystem.DB.Migrations
 {
     /// <inheritdoc />
-    public partial class _23030401 : Migration
+    public partial class _23030601 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -39,17 +39,16 @@ namespace TeachingEvaluationSystem.DB.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "QuestionBanks",
+                name: "QuestionType",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Tile = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_QuestionBanks", x => x.Id);
+                    table.PrimaryKey("PK_QuestionType", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -82,22 +81,21 @@ namespace TeachingEvaluationSystem.DB.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OptionBanks",
+                name: "QuestionBanks",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    QuestionBankId = table.Column<int>(type: "int", nullable: true),
-                    Weight = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    Tile = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    QuestionTypeId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OptionBanks", x => x.Id);
+                    table.PrimaryKey("PK_QuestionBanks", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OptionBanks_QuestionBanks_QuestionBankId",
-                        column: x => x.QuestionBankId,
-                        principalTable: "QuestionBanks",
+                        name: "FK_QuestionBanks_QuestionType_QuestionTypeId",
+                        column: x => x.QuestionTypeId,
+                        principalTable: "QuestionType",
                         principalColumn: "Id");
                 });
 
@@ -153,6 +151,50 @@ namespace TeachingEvaluationSystem.DB.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "OptionBanks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    QuestionBankId = table.Column<int>(type: "int", nullable: true),
+                    Weight = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OptionBanks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OptionBanks_QuestionBanks_QuestionBankId",
+                        column: x => x.QuestionBankId,
+                        principalTable: "QuestionBanks",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "QuestionBankRole",
+                columns: table => new
+                {
+                    QuestionsId = table.Column<int>(type: "int", nullable: false),
+                    RolesId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_QuestionBankRole", x => new { x.QuestionsId, x.RolesId });
+                    table.ForeignKey(
+                        name: "FK_QuestionBankRole_QuestionBanks_QuestionsId",
+                        column: x => x.QuestionsId,
+                        principalTable: "QuestionBanks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_QuestionBankRole_Roles_RolesId",
+                        column: x => x.RolesId,
+                        principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserClasses",
                 columns: table => new
                 {
@@ -187,6 +229,16 @@ namespace TeachingEvaluationSystem.DB.Migrations
                 column: "QuestionBankId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_QuestionBankRole_RolesId",
+                table: "QuestionBankRole",
+                column: "RolesId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuestionBanks_QuestionTypeId",
+                table: "QuestionBanks",
+                column: "QuestionTypeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserClasses_ClassesId",
                 table: "UserClasses",
                 column: "ClassesId");
@@ -217,6 +269,9 @@ namespace TeachingEvaluationSystem.DB.Migrations
                 name: "OptionBanks");
 
             migrationBuilder.DropTable(
+                name: "QuestionBankRole");
+
+            migrationBuilder.DropTable(
                 name: "UserAnswers");
 
             migrationBuilder.DropTable(
@@ -230,6 +285,9 @@ namespace TeachingEvaluationSystem.DB.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "QuestionType");
 
             migrationBuilder.DropTable(
                 name: "Classes");

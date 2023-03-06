@@ -12,8 +12,8 @@ using TeachingEvaluationSystem.DB;
 namespace TeachingEvaluationSystem.DB.Migrations
 {
     [DbContext(typeof(TeachingEvaluationSystemDB))]
-    [Migration("20230304082655_23030404")]
-    partial class _23030404
+    [Migration("20230306063442_23030602")]
+    partial class _23030602
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -127,16 +127,38 @@ namespace TeachingEvaluationSystem.DB.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("QuestionTypeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Tile")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Type")
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionTypeId");
+
+                    b.ToTable("QuestionBanks");
+                });
+
+            modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.QuestionType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Weight")
+                        .IsRequired()
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
-                    b.ToTable("QuestionBanks");
+                    b.ToTable("QuestionType");
                 });
 
             modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.Role", b =>
@@ -272,6 +294,15 @@ namespace TeachingEvaluationSystem.DB.Migrations
                         .HasForeignKey("QuestionBankId");
 
                     b.Navigation("QuestionBank");
+                });
+
+            modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.QuestionBank", b =>
+                {
+                    b.HasOne("TeachingEvaluationSystem.DB.Entitys.QuestionType", "QuestionType")
+                        .WithMany()
+                        .HasForeignKey("QuestionTypeId");
+
+                    b.Navigation("QuestionType");
                 });
 
             modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.User", b =>

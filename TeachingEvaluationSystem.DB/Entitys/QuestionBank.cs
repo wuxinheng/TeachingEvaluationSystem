@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace TeachingEvaluationSystem.DB.Entitys
 {
-    public class QuestionBank
+    public class QuestionBank : BaseEntity
     {
         public QuestionBank()
         {
@@ -17,9 +17,9 @@ namespace TeachingEvaluationSystem.DB.Entitys
             Code = Guid.NewGuid();
             Roles = new List<Role>();
         }
-        public int Id { get; set; }
         [Required] public string? Tile { get; set; }
-        public string? Type { get; set; }
+        public QuestionType? QuestionType { get; set; }
+        public int QuestionTypeId { get; set; }
         public virtual List<OptionBank> OptionBanks { get; set; }
         public virtual List<Role> Roles { get; set; }
         [NotMapped]

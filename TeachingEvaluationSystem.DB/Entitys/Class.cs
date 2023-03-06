@@ -6,14 +6,13 @@ using System.Threading.Tasks;
 
 namespace TeachingEvaluationSystem.DB.Entitys
 {
-    public class Class
+    public class Class: BaseEntity
     {
         public Class()
         {
             Teachers = new List<UserClass>();
             Students = new List<User>();
         }
-        public int Id { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
         public virtual List<UserClass> Teachers { get; set; }

@@ -1,5 +1,7 @@
 ﻿@page "/question/index"
+@using TeachingEvaluationSystem.Comom;
 @using TeachingEvaluationSystem.Data;
+@inject QuestionTypeService QuestionTypeService
 @inject QuestionBankService QuestionBankService
 @inject IJSRuntime JS
 
@@ -9,45 +11,51 @@
 <form>
     @foreach (var item in Questions)
     {
-                      <fieldset>
-                          <legend style="display: flex;">
+        <fieldset>
+            <legend style="display: flex;">
                 @item.Sequence.&nbsp;
-                              <input class="form-control" type="text" @bind="@item.Tile" required placeholder="请输入填写题目">
-                          </legend>
-                          <div class="mb-3">
-                               <div class="row g-3" style="display: flex;align-items: center;">
-                                  <div class="col-8" style="margin:16px;"><label>选项</label></div>
-                                  <div class="col-2" style="margin:16px;"><label>权重</label></div>
-                               </div>
+                <input class="form-control" type="text" @bind="@item.Tile" required placeholder="请输入填写题目">
+                <select style="width:200px;margin-left:10px;" class="form-select" aria-label="Default select example" required @bind="@item.QuestionTypeId">
+                    @foreach (var questionType in Page.Data)
+                    {
+                        <option value="@questionType.Id">@questionType.Name</option>
+                    }
+                </select>
+            </legend>
+            <div class="mb-3">
+                <div class="row g-3" style="display: flex;align-items: center;">
+                    <div class="col-8" style="margin:16px;"><label>选项</label></div>
+                    <div class="col-2" style="margin:16px;"><label>权重</label></div>
+                </div>
                 @foreach (var option in @item.OptionBanks)
                 {
-                                               <div class="row g-3" style="display: flex;align-items: center;">
-                                                   <div class="col-8" style="margin:16px;">
-                                                       <input type="text" class="form-control" placeholder="请输入填写选项" @bind="@option.Content" required>
-                                                   </div>
-                                                   <div class="col-2" style="margin:16px;">
-                                                       <select class="form-select" aria-label="Default select example" required @bind="@option.Weight">
-                                                           <option value="0">0.0</option>
-                                                           <option value="0.1">0.1</option>
-                                                           <option value="0.2">0.2</option>
-                                                           <option value="0.3">0.3</option>
-                                                           <option value="0.4">0.4</option>
-                                                           <option value="0.5">0.5</option>
-                                                           <option value="0.6">0.6</option>
-                                                           <option value="0.7">0.7</option>
-                                                           <option value="0.8">0.8</option>
-                                                           <option value="0.9">0.9</option>
-                                                           <option value="1">1.0</option>
-                                                       </select>
-                                                   </div>
-                                               </div>
+                    <div class="row g-3" style="display: flex;align-items: center;">
+                        <div class="col-8" style="margin:16px;">
+                            <input type="text" class="form-control" placeholder="请输入填写选项" @bind="@option.Content" required>
+                        </div>
+                        <div class="col-2" style="margin:16px;">
+                            <select class="form-select" aria-label="Default select example" required @bind="@option.Weight">
+                                <option value="0">0.0</option>
+                                <option value="0.1">0.1</option>
+                                <option value="0.2">0.2</option>
+                                <option value="0.3">0.3</option>
+                                <option value="0.4">0.4</option>
+                                <option value="0.5">0.5</option>
+                                <option value="0.6">0.6</option>
+                                <option value="0.7">0.7</option>
+                                <option value="0.8">0.8</option>
+                                <option value="0.9">0.9</option>
+                                <option value="1">1.0</option>
+                            </select>
+                        </div>
+                    </div>
                 }
-                          </div>
-                      </fieldset>
+            </div>
+        </fieldset>
 
     }
-    <button type="submit" style="width:40px;height:40px;position:fixed;right:2vw;top:65vh;z-index:100;border: none;padding: 0;" @onsubmit="Save">
-        <img src="images\save.png"  alt="" class="t-image t-image--fit-cover t-image--position-center">
+    <button style="width:40px;height:40px;position:fixed;right:2vw;top:65vh;z-index:100;border: none;padding: 0;">
+        <img src="images\save.png" alt="" class="t-image t-image--fit-cover t-image--position-center" @onclick="Save">
     </button>
 
 </form>
@@ -55,10 +63,12 @@
 @code {
 
     public List<DB.Entitys.QuestionBank> Questions { get; set; } = new List<DB.Entitys.QuestionBank>();
-
+    public Page<DB.Entitys.QuestionType> Page = new Page<DB.Entitys.QuestionType>() { Data = new List<DB.Entitys.QuestionType>() };
     protected override async Task OnInitializedAsync()
     {
+
         Questions = await QuestionBankService.GetList();
+        Page = await QuestionTypeService.GetPage(1, 10000);
     }
 
     public void AddQuestions()

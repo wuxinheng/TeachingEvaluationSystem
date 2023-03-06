@@ -5,30 +5,25 @@
 namespace TeachingEvaluationSystem.DB.Migrations
 {
     /// <inheritdoc />
-    public partial class _23030402 : Migration
+    public partial class _23030602 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<double>(
+            migrationBuilder.AddColumn<double>(
                 name: "Weight",
-                table: "OptionBanks",
+                table: "QuestionType",
                 type: "float",
                 nullable: false,
-                oldClrType: typeof(decimal),
-                oldType: "decimal(18,2)");
+                defaultValue: 0.0);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<decimal>(
+            migrationBuilder.DropColumn(
                 name: "Weight",
-                table: "OptionBanks",
-                type: "decimal(18,2)",
-                nullable: false,
-                oldClrType: typeof(double),
-                oldType: "float");
+                table: "QuestionType");
         }
     }
 }
