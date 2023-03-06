@@ -90,6 +90,7 @@ namespace TeachingEvaluationSystem.DB
             modelBuilder.Entity<UserClass>().Navigation(e => e.Subjects).AutoInclude();
             modelBuilder.Entity<QuestionBank>().Navigation(e => e.OptionBanks).AutoInclude();
             modelBuilder.Entity<QuestionBank>().Navigation(e => e.QuestionType).AutoInclude();
+            modelBuilder.Entity<Subject>().Navigation(e => e.Questions).AutoInclude();
         }
 
     }

@@ -11,11 +11,10 @@ namespace TeachingEvaluationSystem.DB.Entitys
         public Role()
         {
             Menus = new List<Menu>();
-            Questions=new List<QuestionBank>();
         }
         public string? Name { get; set; }
         public string? Description { get; set; }
         public virtual List<Menu> Menus { get; set; }
-        public virtual List<QuestionBank> Questions { get; set; }
+        
     }
 }

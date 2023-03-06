@@ -1,7 +1,7 @@
 ﻿@page "/subjectpage/edit/{id?}"
 @using TeachingEvaluationSystem.Data;
 @using Microsoft.AspNetCore.Components.Forms
-
+@inject QuestionBankService QuestionBankService
 @inject SubjectService SubjectService
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JS
@@ -10,7 +10,45 @@
     <label for="exampleInputEmail1" class="form-label">用户名</label>
     <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" @bind="@Subject.Name">
 </div>
+<div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">题库</label>
 
+    @if (Questions != null)
+    {
+        var typeName = Questions[0].QuestionType?.Name;
+        foreach (var item in Questions)
+        {
+            int index = Questions.IndexOf(item);
+            if (index != 0 && typeName != Questions[index].QuestionType.Name)
+            {
+                typeName = Questions[index].QuestionType.Name;
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item active" aria-current="page">@typeName</li>
+                    </ol>
+                </nav>
+
+            }
+            else if (index == 0)
+            {
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item active" aria-current="page">@typeName</li>
+                    </ol>
+                </nav>
+
+            }
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" @bind="@item.Check" id="@item.Tile+@item.Id">
+                <label class="form-check-label" for="@item.Tile+@item.Id">
+                    @item.Tile
+                </label>
+            </div>
+        }
+    }
+
+
+</div>
 <button class="btn btn-primary" @onclick="Save">保存</button>
 
 @code {
@@ -19,7 +57,7 @@
     public string? Id { get; set; }
 
     public string? ConfirmPassword { get; set; }
-
+    public List<TeachingEvaluationSystem.DB.Entitys.QuestionBank>? Questions { get; set; }
     public Edit()
     {
         Subject = new DB.Entitys.Subject();
@@ -28,7 +66,7 @@
 
     public async Task Save()
     {
-
+        Subject.Questions = Questions.Where(x => x.Check == true).ToList();
         var isSuccess = await SubjectService.Save(Subject);
         if (isSuccess)
         {
@@ -45,12 +83,26 @@
 
     protected override async Task OnInitializedAsync()
     {
+        Questions = await QuestionBankService.GetList();
+        Questions = Questions.OrderBy(x => x.QuestionTypeId).ToList();
         var id = string.IsNullOrWhiteSpace(Id) ? 0 : int.Parse(Id);
         Subject = await SubjectService.Get(id);
         if (Subject == null)
         {
             Subject = new DB.Entitys.Subject();
         }
+        foreach (var item in Questions)
+        {
+            var questions = Subject.Questions.FirstOrDefault(x => x.Id == item.Id);
+            if (questions == null)
+            {
+                item.Check = false;
+            }
+            else
+            {
+                item.Check = true;
+            }
 
+        }
     }
 }
