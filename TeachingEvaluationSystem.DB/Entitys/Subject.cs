@@ -15,6 +15,7 @@ namespace TeachingEvaluationSystem.DB.Entitys
         }
         public string? Name { get; set; }
         public virtual List<QuestionBank> Questions { get; set; }
+        public int GrossScore { get; set; }
         [NotMapped]
         public bool Check { get; set; }
     }

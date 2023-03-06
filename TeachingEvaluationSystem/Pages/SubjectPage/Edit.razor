@@ -11,6 +11,10 @@
     <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" @bind="@Subject.Name">
 </div>
 <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">考核总分</label>
+    <input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" @bind="@Subject.GrossScore">
+</div>
+<div class="mb-3">
     <label for="exampleInputEmail1" class="form-label">题库</label>
 
     @if (Questions != null)
@@ -24,7 +28,7 @@
                 typeName = Questions[index].QuestionType.Name;
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item active" aria-current="page">@typeName</li>
+                        <li class="breadcrumb-item active" aria-current="page">考核项{<b>@typeName</b>}   总分中占比{<b>@(item.QuestionType.Weight * 100)%</b>}</li>
                     </ol>
                 </nav>
 
@@ -33,7 +37,7 @@
             {
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item active" aria-current="page">@typeName</li>
+                        <li class="breadcrumb-item active" aria-current="page">考核项{<b>@typeName</b>}   总分中占比{<b>@(item.QuestionType.Weight * 100)%</b>}</li>
                     </ol>
                 </nav>
 
