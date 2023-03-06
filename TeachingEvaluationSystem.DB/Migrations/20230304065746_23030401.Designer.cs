@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TeachingEvaluationSystem.DB;
 
@@ -11,9 +12,11 @@ using TeachingEvaluationSystem.DB;
 namespace TeachingEvaluationSystem.DB.Migrations
 {
     [DbContext(typeof(TeachingEvaluationSystemDB))]
-    partial class TeachingEvaluationSystemDBModelSnapshot : ModelSnapshot
+    [Migration("20230304065746_23030401")]
+    partial class _23030401
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,21 +38,6 @@ namespace TeachingEvaluationSystem.DB.Migrations
                     b.HasIndex("RolesId");
 
                     b.ToTable("MenuRole");
-                });
-
-            modelBuilder.Entity("QuestionBankRole", b =>
-                {
-                    b.Property<int>("QuestionsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RolesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("QuestionsId", "RolesId");
-
-                    b.HasIndex("RolesId");
-
-                    b.ToTable("QuestionBankRole");
                 });
 
             modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.Class", b =>
@@ -99,15 +87,13 @@ namespace TeachingEvaluationSystem.DB.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Content")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("QuestionBankId")
                         .HasColumnType("int");
 
-                    b.Property<double?>("Weight")
-                        .IsRequired()
-                        .HasColumnType("float");
+                    b.Property<decimal>("Weight")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -125,7 +111,6 @@ namespace TeachingEvaluationSystem.DB.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Tile")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Type")
@@ -237,21 +222,6 @@ namespace TeachingEvaluationSystem.DB.Migrations
                     b.HasOne("TeachingEvaluationSystem.DB.Entitys.Menu", null)
                         .WithMany()
                         .HasForeignKey("MenusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TeachingEvaluationSystem.DB.Entitys.Role", null)
-                        .WithMany()
-                        .HasForeignKey("RolesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("QuestionBankRole", b =>
-                {
-                    b.HasOne("TeachingEvaluationSystem.DB.Entitys.QuestionBank", null)
-                        .WithMany()
-                        .HasForeignKey("QuestionsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

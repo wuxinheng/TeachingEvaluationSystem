@@ -32,7 +32,7 @@
     {
         if (role.Name == "admin")
         {
-            await JS.InvokeAsync<bool>("alert", "禁止删除系统管理员！");
+            await JS.InvokeVoidAsync("alert", "禁止删除系统管理员！");
             await OnInitializedAsync();
             return;
         }

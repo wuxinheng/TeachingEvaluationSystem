@@ -4,6 +4,7 @@
 
 @inject RoleService RoleService
 @inject MenuService MenuService
+@inject QuestionBankService QuestionBankService
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JS
 
@@ -33,6 +34,24 @@
 
 
 </div>
+<div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">题库</label>
+
+    @if (Questions != null)
+    {
+        foreach (var item in Questions)
+        {
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" @bind="@item.Check" id="@item.Tile+@item.Id">
+                        <label class="form-check-label" for="@item.Tile+@item.Id">
+                    @item.Tile
+                        </label>
+                    </div>
+        }
+    }
+
+
+</div>
 <button class="btn btn-primary" @onclick="Save">保存</button>
 
 @code {
@@ -45,9 +64,11 @@
     }
     public TeachingEvaluationSystem.DB.Entitys.Role? Role { get; set; }
     public List<TeachingEvaluationSystem.DB.Entitys.Menu>? Menus { get; set; }
+    public List<TeachingEvaluationSystem.DB.Entitys.QuestionBank>? Questions { get; set; }
     public async Task Save()
     {
         Role.Menus = Menus.Where(x => x.Check == true).ToList();
+        Role.Questions = Questions.Where(x => x.Check == true).ToList();
 
         var isSuccess = await RoleService.Save(Role);
         if (isSuccess)
@@ -70,7 +91,7 @@
             Role = new DB.Entitys.Role();
         }
         Menus = await MenuService.GetList();
-
+        Questions =await QuestionBankService.GetList();
         foreach (var item in Menus)
         {
             var menu = Role.Menus.FirstOrDefault(x => x.Id == item.Id);

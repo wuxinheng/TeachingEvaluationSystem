@@ -34,6 +34,16 @@ namespace TeachingEvaluationSystem.Data
             return Task.FromResult(page);
         }
 
+        public Task<List<QuestionBank>> GetList()
+        {
+            var questions = _dbContext.Set<QuestionBank>().ToList();
+            for (int i = 0; i < questions.Count; i++)
+            {
+                questions[i].Sequence = i + 1;
+            }
+            return Task.FromResult(questions);
+        }
+
 
         public async Task<QuestionBank> Get(int id)
         {

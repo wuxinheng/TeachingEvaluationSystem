@@ -50,11 +50,24 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Remove="Resources\Images\add.png" />
+    </ItemGroup>
+
+    <ItemGroup>
       <PackageReference Include="TDesign" Version="0.4.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\TeachingEvaluationSystem.DB\TeachingEvaluationSystem.DB.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Update="wwwroot\images\add.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Update="wwwroot\images\save.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>

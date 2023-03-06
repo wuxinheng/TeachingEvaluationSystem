@@ -5,7 +5,7 @@
 namespace TeachingEvaluationSystem.DB.Migrations
 {
     /// <inheritdoc />
-    public partial class _23030301 : Migration
+    public partial class _23030401 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -89,7 +89,7 @@ namespace TeachingEvaluationSystem.DB.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     QuestionBankId = table.Column<int>(type: "int", nullable: true),
-                    Weight = table.Column<double>(type: "float", nullable: false)
+                    Weight = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
