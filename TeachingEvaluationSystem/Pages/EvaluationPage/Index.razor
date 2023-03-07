@@ -1,0 +1,17 @@
+﻿@page "/evaluationpage/index"
+@using TeachingEvaluationSystem.DB.Entitys;
+
+@*<h5>admin <span class="badge bg-secondary">1706</span></h5>
+<TTable TItem="UserClass" Data="@UserClasses" Striped>
+    <FieldColumn Value="@context?.Id" Title="Id" />
+    <FieldColumn Value="@context?.Classes.Name" Title="名称" />
+    <FieldColumn Value="@context?.Subjects" Title="路由" />
+    <FieldColumn Title="操作">
+        <TButton Theme="Theme.Danger" Size="Size.Small" OnClick="e=>Delete(context)">删除</TButton>
+        <TButton Theme="Theme.Primary" Size="Size.Small" OnClick='e=>NavigationManager.NavigateTo($"/menu/edit/{context?.Id}")'>编辑</TButton>
+    </FieldColumn>
+</TTable>
+*@
+@*@code {
+    public List<UserClass> UserClasses { get; set; }
+}*@
