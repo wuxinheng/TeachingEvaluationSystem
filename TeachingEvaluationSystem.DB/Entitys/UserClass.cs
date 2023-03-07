@@ -10,7 +10,6 @@ namespace TeachingEvaluationSystem.DB.Entitys
     {
         public UserClass()
         {
-            //Subjects = new List<Subject>();
         }
         public int? ClassesId { get; set; }
         public int? UserId { get; set; }

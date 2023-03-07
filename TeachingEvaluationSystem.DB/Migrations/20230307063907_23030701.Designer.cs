@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TeachingEvaluationSystem.DB;
 
@@ -11,9 +12,11 @@ using TeachingEvaluationSystem.DB;
 namespace TeachingEvaluationSystem.DB.Migrations
 {
     [DbContext(typeof(TeachingEvaluationSystemDB))]
-    partial class TeachingEvaluationSystemDBModelSnapshot : ModelSnapshot
+    [Migration("20230307063907_23030701")]
+    partial class _23030701
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,6 +38,21 @@ namespace TeachingEvaluationSystem.DB.Migrations
                     b.HasIndex("RolesId");
 
                     b.ToTable("MenuRole");
+                });
+
+            modelBuilder.Entity("QuestionBankSubject", b =>
+                {
+                    b.Property<int>("QuestionsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuestionsId1")
+                        .HasColumnType("int");
+
+                    b.HasKey("QuestionsId", "QuestionsId1");
+
+                    b.HasIndex("QuestionsId1");
+
+                    b.ToTable("QuestionBankSubject");
                 });
 
             modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.Class", b =>
@@ -120,32 +138,6 @@ namespace TeachingEvaluationSystem.DB.Migrations
                     b.HasIndex("QuestionTypeId");
 
                     b.ToTable("QuestionBanks");
-                });
-
-            modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.QuestionBankSubject", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("QuestionBankId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Score")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SubjectId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionBankId");
-
-                    b.HasIndex("SubjectId");
-
-                    b.ToTable("BankSubjects");
                 });
 
             modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.QuestionType", b =>
@@ -320,6 +312,21 @@ namespace TeachingEvaluationSystem.DB.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("QuestionBankSubject", b =>
+                {
+                    b.HasOne("TeachingEvaluationSystem.DB.Entitys.QuestionBank", null)
+                        .WithMany()
+                        .HasForeignKey("QuestionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TeachingEvaluationSystem.DB.Entitys.Subject", null)
+                        .WithMany()
+                        .HasForeignKey("QuestionsId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.OptionBank", b =>
                 {
                     b.HasOne("TeachingEvaluationSystem.DB.Entitys.QuestionBank", "QuestionBank")
@@ -338,25 +345,6 @@ namespace TeachingEvaluationSystem.DB.Migrations
                         .IsRequired();
 
                     b.Navigation("QuestionType");
-                });
-
-            modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.QuestionBankSubject", b =>
-                {
-                    b.HasOne("TeachingEvaluationSystem.DB.Entitys.QuestionBank", "QuestionBank")
-                        .WithMany("Subjects")
-                        .HasForeignKey("QuestionBankId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TeachingEvaluationSystem.DB.Entitys.Subject", "Subject")
-                        .WithMany("Questions")
-                        .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("QuestionBank");
-
-                    b.Navigation("Subject");
                 });
 
             modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.Role", b =>
@@ -442,13 +430,6 @@ namespace TeachingEvaluationSystem.DB.Migrations
                     b.Navigation("OptionBanks");
 
                     b.Navigation("Roles");
-
-                    b.Navigation("Subjects");
-                });
-
-            modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.Subject", b =>
-                {
-                    b.Navigation("Questions");
                 });
 
             modelBuilder.Entity("TeachingEvaluationSystem.DB.Entitys.User", b =>

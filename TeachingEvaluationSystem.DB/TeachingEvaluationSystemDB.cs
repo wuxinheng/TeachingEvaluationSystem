@@ -25,7 +25,7 @@ namespace TeachingEvaluationSystem.DB
         {
             //#region DataInit
 
-            
+
             //if (Roles.Count() == 0)
             //{
             //    var roles = new List<Role>
@@ -70,6 +70,7 @@ namespace TeachingEvaluationSystem.DB
         public DbSet<QuestionBank> QuestionBanks { get; set; }
         public DbSet<UserAnswer> UserAnswers { get; set; }
         public DbSet<UserClass> UserClasses { get; set; }
+        public DbSet<QuestionBankSubject> BankSubjects { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

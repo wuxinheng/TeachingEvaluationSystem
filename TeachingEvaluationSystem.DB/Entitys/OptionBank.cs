@@ -12,7 +12,7 @@ namespace TeachingEvaluationSystem.DB.Entitys
     {
         [Required] public string? Content { get; set; }
         public QuestionBank? QuestionBank { get; set; }
-        [Required] public double? Weight { get; set; }
+        [Required] public double Weight { get; set; }
 
     }
 }

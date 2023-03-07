@@ -16,14 +16,14 @@ namespace TeachingEvaluationSystem.DB.Entitys
             OptionBanks = new List<OptionBank>();
             Code = Guid.NewGuid();
             Roles = new List<Role>();
-            Questions = new List<Subject>();
+            Subjects = new List<QuestionBankSubject>();
         }
         [Required] public string? Tile { get; set; }
         public QuestionType? QuestionType { get; set; }
         public int QuestionTypeId { get; set; }
         public virtual List<OptionBank> OptionBanks { get; set; }
         public virtual List<Role> Roles { get; set; }
-        public virtual List<Subject> Questions { get; set; }
+        public virtual List<QuestionBankSubject> Subjects { get; set; }
         [NotMapped]
         public int Sequence { get; set; }
         [NotMapped]

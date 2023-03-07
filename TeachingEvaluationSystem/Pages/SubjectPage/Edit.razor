@@ -12,7 +12,7 @@
 </div>
 <div class="mb-3">
     <label for="exampleInputEmail1" class="form-label">考核总分</label>
-    <input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" @bind="@Subject.GrossScore">
+    <input type="nu" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" @bind="@Subject.GrossScore">
 </div>
 <div class="mb-3">
     <label for="exampleInputEmail1" class="form-label">题库</label>
@@ -70,7 +70,28 @@
 
     public async Task Save()
     {
-        Subject.Questions = Questions.Where(x => x.Check == true).ToList();
+        var questions = Questions.Where(x => x.Check == true).ToList();
+        Subject.Questions = new List<DB.Entitys.QuestionBankSubject>();
+        foreach (var item in questions)
+        {
+            // 总分*考核项=考核项题目总分
+            var questionTypeGrossScore = Subject.GrossScore * item.QuestionType.Weight;
+            // 考核项题目总分/考核项题目=平均分
+            var questionScore = questionTypeGrossScore / questions.Count(x => x.QuestionTypeId == item.QuestionTypeId);
+            Subject.Questions.Add(new DB.Entitys.QuestionBankSubject() { QuestionBank = item, Subject = Subject, Score = Convert.ToInt32(questionScore) });
+        }
+        var totalScore = Subject.Questions.Sum(x => x.Score);
+        if (totalScore > 100)
+        {
+            // TODO 不严谨，可以循环扣除
+            var noun = totalScore - 100;
+            Subject.Questions.First().Score -= noun;
+        }
+        else if (totalScore < 100)
+        {
+            var noun = 100 - totalScore;
+            Subject.Questions.First().Score += noun;
+        }
         var isSuccess = await SubjectService.Save(Subject);
         if (isSuccess)
         {
@@ -97,7 +118,7 @@
         }
         foreach (var item in Questions)
         {
-            var questions = Subject.Questions.FirstOrDefault(x => x.Id == item.Id);
+            var questions = Subject.Questions.FirstOrDefault(x => x.QuestionBank.Id == item.Id);
             if (questions == null)
             {
                 item.Check = false;

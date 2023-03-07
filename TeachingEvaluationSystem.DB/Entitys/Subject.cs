@@ -11,10 +11,10 @@ namespace TeachingEvaluationSystem.DB.Entitys
     {
         public Subject()
         {
-            Questions = new List<QuestionBank>();
+            Questions = new List<QuestionBankSubject>();
         }
         public string? Name { get; set; }
-        public virtual List<QuestionBank> Questions { get; set; }
+        public virtual List<QuestionBankSubject> Questions { get; set; }
         public int GrossScore { get; set; }
         [NotMapped]
         public bool Check { get; set; }
