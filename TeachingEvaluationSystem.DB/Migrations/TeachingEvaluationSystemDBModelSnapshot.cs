@@ -206,7 +206,7 @@ namespace TeachingEvaluationSystem.DB.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserClassId")
+                    b.Property<int?>("UserClassId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -408,9 +408,7 @@ namespace TeachingEvaluationSystem.DB.Migrations
                 {
                     b.HasOne("TeachingEvaluationSystem.DB.Entitys.UserClass", "UserClasses")
                         .WithMany("Subjects")
-                        .HasForeignKey("UserClassId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserClassId");
 
                     b.Navigation("UserClasses");
                 });

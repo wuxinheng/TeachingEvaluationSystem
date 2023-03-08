@@ -15,12 +15,12 @@ namespace TeachingEvaluationSystem.DB.Entitys
             Questions = new List<QuestionBankSubject>();
         }
         public string? Name { get; set; }
-        public virtual List<QuestionBankSubject> Questions { get; set; }
+        public virtual List<QuestionBankSubject>? Questions { get; set; }
         public int GrossScore { get; set; }
         [NotMapped]
         public bool Check { get; set; }
-        public int UserClassId { get; set; }
-        public UserClass UserClasses { get; set; }
+        public int? UserClassId { get; set; }
+        public UserClass? UserClasses { get; set; }
         
     }
 }

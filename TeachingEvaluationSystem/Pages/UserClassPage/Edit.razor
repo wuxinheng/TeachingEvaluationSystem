@@ -1,4 +1,4 @@
-﻿@page "/userclasspage/edit/{id?}"
+﻿@page "/userclasspage/edit/{classid?}/{userid?}"
 @using TeachingEvaluationSystem.Data;
 @using Microsoft.AspNetCore.Components.Forms
 
@@ -22,12 +22,12 @@
     {
         foreach (var item in Subjects)
         {
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" @bind="@item.Check" id="@item.Name+@item.Id">
-                <label class="form-check-label" for="@item.Name+@item.Id">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" @bind="@item.Check" id="@item.Name+@item.Id">
+                        <label class="form-check-label" for="@item.Name+@item.Id">
                     @item.Name
-                </label>
-            </div>
+                        </label>
+                    </div>
         }
     }
 
@@ -39,7 +39,8 @@
 @code {
 
     [Parameter]
-    public string? Id { get; set; }
+    public string? ClassId { get; set; }
+    [Parameter] public string? UserId { get; set; }
 
     public string? ConfirmPassword { get; set; }
 
@@ -57,7 +58,7 @@
         if (isSuccess)
         {
             await JS.InvokeVoidAsync("alert", "保存成功！");
-            NavigationManager.NavigateTo("/subjectpage/index", false);
+            NavigationManager.NavigateTo("/class/index", false);
         }
         else
         {
@@ -71,8 +72,9 @@
     {
 
 
-        var id = string.IsNullOrWhiteSpace(Id) ? 0 : int.Parse(Id);
-        UserClasses = await UserClassesService.Get(id);
+        var classid = string.IsNullOrWhiteSpace(ClassId) ? 0 : int.Parse(ClassId);
+        var userid = string.IsNullOrWhiteSpace(UserId) ? 0 : int.Parse(UserId);
+        UserClasses = await UserClassesService.Get(classid, userid);
         if (UserClasses == null)
         {
             UserClasses = new DB.Entitys.UserClass();

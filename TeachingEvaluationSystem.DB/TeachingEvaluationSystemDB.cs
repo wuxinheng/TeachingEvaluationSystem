@@ -54,8 +54,8 @@ namespace TeachingEvaluationSystem.DB
                     new() { Name = "主页", Route = @$"" },
                     new() { Name = "登录", Route = @$"login" },
                     new() { Name = "用户", Route = @$"user/index" },
-                    new() { Name = "菜单", Route = @$"role/index" },
-                    new() { Name = "角色", Route = @$"menu/index" },
+                    new() { Name = "角色", Route = @$"role/index" },
+                    new() { Name = "菜单", Route = @$"menu/index" },
                     new() { Name = "评价", Route = @$"evaluationpage/index" },
                     new() { Name = "班级", Route = @$"class/index" },
                     new() { Name = "学科", Route = @$"subjectpage/index" },
@@ -92,6 +92,7 @@ namespace TeachingEvaluationSystem.DB
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>().Navigation(e => e.Role).AutoInclude();
             modelBuilder.Entity<Role>().Navigation(e => e.Menus).AutoInclude();
             modelBuilder.Entity<Class>().Navigation(e => e.Students).AutoInclude();
             modelBuilder.Entity<Class>().Navigation(e => e.Teachers).AutoInclude();

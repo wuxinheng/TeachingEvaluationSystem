@@ -49,7 +49,7 @@
                     @if (string.IsNullOrWhiteSpace(Operate) && Type == "1")
                     {
                         <td>@string.Join(",",item.UserClasses.FirstOrDefault(x => x.ClassesId.ToString() == Id)?.Subjects.Select(x=>x.Name).ToList())</td>
-                        <td><TButton Theme="Theme.Primary" Size="Size.Small" OnClick='e=>NavigationManager.NavigateTo($"/userclasspage/edit/{item?.UserClasses.Find(x=>x.ClassesId.ToString()==Id).ClassesId}")'>设置学科</TButton></td>
+                        <td><TButton Theme="Theme.Primary" Size="Size.Small" OnClick='e=>NavigationManager.NavigateTo($"/userclasspage/edit/{Id}/{item?.Id}")'>设置学科</TButton></td>
                     }
                 </tr>
             }

@@ -32,13 +32,13 @@ namespace TeachingEvaluationSystem.Data
             return users;
         }
 
-        public Task<UserClass> Get(int id)
+        public Task<UserClass> Get(int classid, int userId)
         {
             try
             {
 
                 var result = new UserClass();
-                result = _dbContext.UserClasses?.FirstOrDefault(x => x.Id == id) ?? new();
+                result = _dbContext.UserClasses?.FirstOrDefault(x => x.ClassesId == classid && x.UserId == userId) ?? new();
                 return Task.FromResult(result);
             }
             catch (Exception e)
@@ -81,12 +81,12 @@ namespace TeachingEvaluationSystem.Data
                   }).ToList();
 
             var yearMonth = DateTime.Now.ToString("yyyy-MM");
-            var userAnswers = _dbContext.UserAnswers.Where(x => x.YearMonth == yearMonth).ToList();
+            var userAnswers = _dbContext.UserAnswers.Where(x => x.YearMonth == yearMonth&&x.StudentId==user.Id).ToList();
 
             foreach (var item in result)
             {
                 var Score = userAnswers.FirstOrDefault(x => x.TeacherId == item.UserId && x.SubjectId == item.SubjectId && x.ClassId == item.ClassId)?.Scores;
-                item.Score = Score??-1;
+                item.Score = Score ?? -1;
                 if (Score >= 0)
                 {
                     item.IsClose = true;

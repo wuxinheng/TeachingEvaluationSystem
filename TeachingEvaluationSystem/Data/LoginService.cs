@@ -19,7 +19,9 @@ namespace TeachingEvaluationSystem.Data
         {
             try
             {
+                
                 var user = _dbContext.Set<User>().FirstOrDefault(x => x.Name == currUser.Name && x.Password == currUser.Password);
+                user.Class = _dbContext.Classes.FirstOrDefault(x => x.Id == user.ClassId);
                 if (user == null)
                 {
                     return Task.FromResult(false);

@@ -28,11 +28,11 @@
         var isExist = await LoginService.Login(User);
         if (isExist)
         {
-            NavigationManager.NavigateTo("/", false);
+            NavigationManager.NavigateTo("", true);
         }
         else
         {
-           await JS.InvokeVoidAsync("alert","账号密码不正确！");
+            await JS.InvokeVoidAsync("alert", "账号密码不正确！");
         }
     }
 }

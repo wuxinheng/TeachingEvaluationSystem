@@ -60,6 +60,10 @@ namespace TeachingEvaluationSystem.Data
 
         public async Task<bool> Save(T t)
         {
+            try
+            {
+
+
             var dbt = await _dbContext.Set<T>().FirstOrDefaultAsync(x => x.Id == t.Id);
             if (dbt == null)
             {
@@ -72,6 +76,12 @@ namespace TeachingEvaluationSystem.Data
             }
             var count = await _dbContext.SaveChangesAsync();
             return count > 0;
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿@using TeachingEvaluationSystem.Data;
 @inherits LayoutComponentBase
 @inject GlobalInfo GlobalInfo
+@inject NavigationManager NavigationManager
 <div class="page">
     <div class="sidebar">
         <NavMenu />
@@ -8,12 +9,12 @@
 
     <main>
         <div class="top-row px-4">
-            <TLink OnClick="e=>refCompleteDialog?.Activate()">
+            <TLink @onclick='e=>NavigationManager.NavigateTo("login")'>
                 @{
                     if (GlobalInfo.User == null)
                     {
-                        var s = "登录";
-                        @s
+                        var text = "登录";
+                        @text;
                     }
                     else
                     {

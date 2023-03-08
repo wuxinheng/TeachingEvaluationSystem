@@ -16,6 +16,6 @@ namespace TeachingEvaluationSystem.DB.Entitys
 
         public virtual Class? Classes { get; set; }
         public virtual User? User { get; set; }
-        public virtual List<Subject> Subjects { get; set; } = new();
+        public virtual List<Subject>? Subjects { get; set; } = new();
     }
 }

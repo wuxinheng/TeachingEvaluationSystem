@@ -7,7 +7,7 @@
 @inject IJSRuntime JS
 
 <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">用户名</label>
+    <label for="exampleInputEmail1" class="form-label">名称</label>
     <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" @bind="@Subject.Name">
 </div>
 <div class="mb-3">
@@ -17,7 +17,7 @@
 <div class="mb-3">
     <label for="exampleInputEmail1" class="form-label">题库</label>
 
-    @if (Questions != null)
+    @if (Questions.Any())
     {
         var typeName = Questions[0].QuestionType?.Name;
         foreach (var item in Questions)
@@ -108,16 +108,18 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Questions = await QuestionBankService.GetList();
-        Questions = Questions.OrderBy(x => x.QuestionTypeId).ToList();
+
         var id = string.IsNullOrWhiteSpace(Id) ? 0 : int.Parse(Id);
         Subject = await SubjectService.Get(id);
         if (Subject == null)
         {
             Subject = new DB.Entitys.Subject();
         }
+        Questions = await QuestionBankService.GetList();
+        Questions = Questions.OrderBy(x => x.QuestionTypeId).ToList();
         foreach (var item in Questions)
         {
+
             var questions = Subject.Questions.FirstOrDefault(x => x.QuestionBank.Id == item.Id);
             if (questions == null)
             {

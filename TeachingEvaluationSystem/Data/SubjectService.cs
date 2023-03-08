@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using TeachingEvaluationSystem.DB;
+﻿using TeachingEvaluationSystem.DB;
 using TeachingEvaluationSystem.DB.Entitys;
 using TeachingEvaluationSystem.Model;
-
-using Windows.ApplicationModel.Chat;
 
 namespace TeachingEvaluationSystem.Data
 {

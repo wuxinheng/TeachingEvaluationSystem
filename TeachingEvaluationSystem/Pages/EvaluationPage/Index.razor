@@ -4,8 +4,9 @@
 @using TeachingEvaluationSystem.Model;
 @inject UserClassesService UserClassesService
 @inject NavigationManager NavigationManager
+@inject GlobalInfo GlobalInfo
 
-<h5>admin <span class="badge bg-secondary">1706</span></h5>
+<h5>@GlobalInfo.User.Name <span class="badge bg-secondary">@GlobalInfo.User?.Class?.Name</span></h5>
 <TTable TItem="@ClassTeacherSubject" Data="@ClassTeacherSubjects" Striped>
     <FieldColumn Value="@context?.ClassName" Title="班级" />
     <FieldColumn Value="@context?.SubjectName" Title="学科" />
@@ -16,11 +17,11 @@
         {
             if (context.IsClose)
             {
-                <TButton Theme="Theme.Primary" OnClick='e=>NavigationManager.NavigateTo($"/evaluationpage/evaluation/0/{1}/{context.ClassId}/{context.SubjectId}/{context.UserId}")'>查看</TButton>
+                        <TButton Theme="Theme.Primary" OnClick='e=>NavigationManager.NavigateTo($"/evaluationpage/evaluation/0/{GlobalInfo.User.Id}/{context.ClassId}/{context.SubjectId}/{context.UserId}")'>查看</TButton>
             }
             else
             {
-                <TButton Theme="Theme.Primary" OnClick='e=>NavigationManager.NavigateTo($"/evaluationpage/evaluation/1/{1}/{context.ClassId}/{context.SubjectId}/{context.UserId}")'>评价</TButton>
+                        <TButton Theme="Theme.Primary" OnClick='e=>NavigationManager.NavigateTo($"/evaluationpage/evaluation/1/{GlobalInfo.User.Id}/{context.ClassId}/{context.SubjectId}/{context.UserId}")'>评价</TButton>
             }
         }
     </FieldColumn>
@@ -31,6 +32,6 @@
 
     protected override void OnInitialized()
     {
-        ClassTeacherSubjects = UserClassesService.GetClassTeacherSubjects(new User() { ClassId = 1 });
+        ClassTeacherSubjects = UserClassesService.GetClassTeacherSubjects(GlobalInfo.User);
     }
 }
