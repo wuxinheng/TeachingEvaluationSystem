@@ -35,17 +35,17 @@ namespace TeachingEvaluationSystem.Data
             return Task.FromResult(page);
         }
 
-        public async Task<List<User>> GetUsers(int roleId,List<int> userIds)
+        public async Task<List<User>> GetUsers(int roleId, List<int> userIds)
         {
-            var users = await _dbContext.Set<User>().Where(x => x.RoleId == roleId).Where(x=>!userIds.Contains(x.Id)).ToListAsync();
+            var users = await _dbContext.Set<User>().Where(x => x.RoleId == roleId).Where(x => !userIds.Contains(x.Id)).ToListAsync();
             return users;
         }
 
-        public async Task<User> Get(int id)
+        public  Task<User> Get(int id)
         {
-            var users = await _dbContext.Set<User>().FirstOrDefaultAsync(x => x.Id == id);
+            var users = _dbContext.Set<User>().FirstOrDefault(x => x.Id == id);
 
-            return users;
+            return Task.FromResult(users);
         }
 
         public async Task<bool> Detele(User user)
@@ -57,7 +57,7 @@ namespace TeachingEvaluationSystem.Data
 
         public async Task<bool> Save(User user)
         {
-            var dbuser = await _dbContext.Set<User>().FirstOrDefaultAsync(x => x.Id == user.Id);
+            var dbuser =  _dbContext.Set<User>().FirstOrDefault(x => x.Id == user.Id);
             if (dbuser == null)
             {
                 dbuser = user;

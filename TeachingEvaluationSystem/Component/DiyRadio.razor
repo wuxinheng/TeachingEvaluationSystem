@@ -1,0 +1,37 @@
+﻿<div class="form-check">
+    @if (Value)
+    {
+        <input class="form-check-input" type="radio" id="@Id" checked name="@Name" value="@Value" @onchange="@OnValueChanged" required>
+    }
+    else
+    {
+        <input class="form-check-input" type="radio" id="@Id" name="@Name" value="@Value" @onchange="@OnValueChanged" required>
+    }
+
+    <label class="form-check-label" for="@Id">
+        @Label
+    </label>
+</div>
+
+@code {
+
+    [Parameter] public string Id { get; set; }
+    [Parameter] public string Label { get; set; }
+    [Parameter] public string Name { get; set; }
+    [Parameter] public bool Value { get; set; }
+    private bool value;
+    [Parameter] public EventCallback<bool> ValueChanged { get; set; }
+    private async Task OnValueChanged(ChangeEventArgs e)
+    {
+        if (e.Value.ToString() == "on")
+        {
+            value = true;
+        }
+        else
+        {
+            value = false;
+        }
+
+        await ValueChanged.InvokeAsync(value);
+    }
+}

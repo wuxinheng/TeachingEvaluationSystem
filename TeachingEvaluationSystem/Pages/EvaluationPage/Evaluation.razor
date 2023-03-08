@@ -1,5 +1,100 @@
-﻿<h3>Evaluation</h3>
+﻿@page "/evaluationpage/evaluation/{type}/{studentid}/{classid}/{subjectid}/{teacherid}"
+@using TeachingEvaluationSystem.DB.Entitys;
+@using TeachingEvaluationSystem.Data;
+@using TeachingEvaluationSystem.Model;
+@inject SubjectService SubjectService
+@inject UserService UserService
+@inject ClassService ClassService
+@inject UserAnswerService UserAnswerService
+@inject IJSRuntime JS
 
+@foreach (var item in SubjectQuestionBanks)
+{
+    <fieldset>
+        <legend>【@item.QuestionType.Name】@item.Sequence:@item.Title (@item.Score 分)</legend>
+        <div class="mb-3">
+            @foreach (var option in item.OptionBanks)
+            {
+                @option.Check.ToString()
+                <TeachingEvaluationSystem.Component.DiyRadio Id="@option.Code.ToString()" Name="@item.Code.ToString()" Label="@option.Content" @bind-Value="@option.Check" />
+            }
+        </div>
+    </fieldset>
+    @if (Type == "1")
+    {
+        <button style="width:40px;height:40px;position:fixed;right:2vw;top:65vh;z-index:100;border: none;padding: 0;">
+            <img src="images\save.png" alt="" class="t-image t-image--fit-cover t-image--position-center" @onclick="Save">
+        </button>
+    }
+
+}
 @code {
+    [Parameter] public string Type { get; set; }
+    [Parameter] public string StudentId { get; set; }
+    [Parameter] public string ClassId { get; set; }
+    [Parameter] public string SubjectId { get; set; }
+    [Parameter] public string TeacherId { get; set; }
+    public List<SubjectQuestionBank> SubjectQuestionBanks { get; set; }
+    public Subject Subject { get; set; }
+    public User Teacher { get; set; }
+    public Class Class { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        Subject = await SubjectService.Get(int.Parse(SubjectId));
+        SubjectQuestionBanks = await SubjectService.GetSubjectQuestionBanks(Subject);
+        Class = await ClassService.Get(int.Parse(ClassId));
+        Teacher = await UserService.Get(int.Parse(TeacherId));
 
+        if (Type == "0")
+        {
+            var userAnswer = await UserAnswerService.Get(int.Parse(StudentId), int.Parse(ClassId), int.Parse(SubjectId), int.Parse(TeacherId));
+            foreach (var item in SubjectQuestionBanks)
+            {
+                var userAnswerDetailsOptionId = userAnswer.AnswerDetails.FirstOrDefault(x => x.QuestionBank.Id == item.QuestionBank.Id).OptionBank.Id;
+                var optionBank = item.OptionBanks.FirstOrDefault(x => x.Id == userAnswerDetailsOptionId);
+                optionBank.Check = true;
+            }
+        }
+    }
+
+    public async Task Save()
+    {
+#if !DEBUG
+        var currDate = DateTime.Now;
+        var nextMonthFirstDay = DateTime.Parse(currDate.AddMonths(1).ToString("yyyy-MM-01 00:00"));
+        var monthStartDate = nextMonthFirstDay.AddDays(-3);
+        if (monthStartDate <= currDate && currDate < nextMonthFirstDay)
+        {
+            await JS.InvokeVoidAsync("alert", "评价还未开启,请在本月最后三天开始进行！");
+        }
+#endif
+
+        var userAnswerDetails = new List<UserAnswerDetail>();
+        foreach (var item in SubjectQuestionBanks)
+        {
+            var selectOption = item.OptionBanks.FirstOrDefault(x => x.Check);
+            var scores = (int)(item.Score * item.OptionBanks.FirstOrDefault(x => x.Check).Weight);
+            var answer = new UserAnswerDetail()
+                {
+                    OptionBank = selectOption,
+                    OptionScores = scores,
+                    QuestionScores = item.Score,
+                    QuestionBank = item.QuestionBank,
+                };
+            userAnswerDetails.Add(answer);
+        }
+
+        UserAnswer userAnswer = new UserAnswer()
+            {
+                AnswerDetails = userAnswerDetails,
+                Scores = userAnswerDetails.Sum(x => x.OptionScores),
+                YearMonth = DateTime.Now.ToString("yyyy-MM"),
+                Class = Class,
+                StudentId = int.Parse(StudentId),
+                Subject = Subject,
+                Teacher = Teacher,
+            };
+
+        await UserAnswerService.Save(userAnswer);
+    }
 }

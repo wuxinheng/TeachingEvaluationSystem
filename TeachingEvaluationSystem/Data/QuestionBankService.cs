@@ -45,11 +45,11 @@ namespace TeachingEvaluationSystem.Data
         }
 
 
-        public async Task<QuestionBank> Get(int id)
+        public Task<QuestionBank> Get(int id)
         {
-            var questions = await _dbContext.Set<QuestionBank>().FirstOrDefaultAsync(x => x.Id == id);
+            var questions = _dbContext.Set<QuestionBank>().FirstOrDefault(x => x.Id == id);
 
-            return questions;
+            return Task.FromResult(questions);
         }
 
         public async Task<bool> Detele(QuestionBank user)
@@ -61,7 +61,7 @@ namespace TeachingEvaluationSystem.Data
 
         public async Task<bool> Save(QuestionBank question)
         {
-            var dbquestion = await _dbContext.Set<QuestionBank>().FirstOrDefaultAsync(x => x.Id == question.Id);
+            var dbquestion =  _dbContext.Set<QuestionBank>().FirstOrDefault(x => x.Id == question.Id);
             if (dbquestion == null)
             {
                 dbquestion = question;
@@ -80,23 +80,23 @@ namespace TeachingEvaluationSystem.Data
             try
             {
 
-            
-            foreach (var item in questions)
-            {
-                var dbquestion = await _dbContext.Set<QuestionBank>().FirstOrDefaultAsync(x => x.Id == item.Id);
-                if (dbquestion == null)
-                {
-                    dbquestion = item;
-                    await _dbContext.Set<QuestionBank>().AddAsync(dbquestion);
-                }
-                else
-                {
-                    _dbContext.Set<QuestionBank>().Update(item);
-                }
 
-            }
-            var count = await _dbContext.SaveChangesAsync();
-            return count > 0;
+                foreach (var item in questions)
+                {
+                    var dbquestion =  _dbContext.Set<QuestionBank>().FirstOrDefault(x => x.Id == item.Id);
+                    if (dbquestion == null)
+                    {
+                        dbquestion = item;
+                        await _dbContext.Set<QuestionBank>().AddAsync(dbquestion);
+                    }
+                    else
+                    {
+                        _dbContext.Set<QuestionBank>().Update(item);
+                    }
+
+                }
+                var count = await _dbContext.SaveChangesAsync();
+                return count > 0;
             }
             catch (Exception e)
             {

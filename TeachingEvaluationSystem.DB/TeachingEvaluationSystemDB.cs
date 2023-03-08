@@ -68,9 +68,12 @@ namespace TeachingEvaluationSystem.DB
         public DbSet<Class> Classes { get; set; }
         public DbSet<OptionBank> OptionBanks { get; set; }
         public DbSet<QuestionBank> QuestionBanks { get; set; }
+        public DbSet<UserAnswerDetail> UserAnswerDetails { get; set; }
         public DbSet<UserAnswer> UserAnswers { get; set; }
         public DbSet<UserClass> UserClasses { get; set; }
+
         public DbSet<QuestionBankSubject> BankSubjects { get; set; }
+        public DbSet<Subject> Subjects { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -91,7 +94,9 @@ namespace TeachingEvaluationSystem.DB
             modelBuilder.Entity<UserClass>().Navigation(e => e.Subjects).AutoInclude();
             modelBuilder.Entity<QuestionBank>().Navigation(e => e.OptionBanks).AutoInclude();
             modelBuilder.Entity<QuestionBank>().Navigation(e => e.QuestionType).AutoInclude();
+            modelBuilder.Entity<QuestionBankSubject>().Navigation(e => e.QuestionBank).AutoInclude();
             modelBuilder.Entity<Subject>().Navigation(e => e.Questions).AutoInclude();
+            modelBuilder.Entity<UserAnswer>().Navigation(e => e.AnswerDetails).AutoInclude();
         }
 
     }

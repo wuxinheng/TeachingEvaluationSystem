@@ -41,11 +41,11 @@ namespace TeachingEvaluationSystem.Data
         }
 
 
-        public async Task<QuestionType> Get(int id)
+        public Task<QuestionType> Get(int id)
         {
-            var questions = await _dbContext.Set<QuestionType>().FirstOrDefaultAsync(x => x.Id == id);
+            var questions = _dbContext.Set<QuestionType>().FirstOrDefault(x => x.Id == id);
 
-            return questions;
+            return Task.FromResult(questions);
         }
 
         public async Task<bool> Detele(QuestionType user)
@@ -57,7 +57,7 @@ namespace TeachingEvaluationSystem.Data
 
         public async Task<bool> Save(QuestionType question)
         {
-            var dbquestion = await _dbContext.Set<QuestionType>().FirstOrDefaultAsync(x => x.Id == question.Id);
+            var dbquestion =  _dbContext.Set<QuestionType>().FirstOrDefault(x => x.Id == question.Id);
             if (dbquestion == null)
             {
                 dbquestion = question;
@@ -75,7 +75,7 @@ namespace TeachingEvaluationSystem.Data
         {
             foreach (var item in questions)
             {
-                var dbquestion = await _dbContext.Set<QuestionType>().FirstOrDefaultAsync(x => x.Id == item.Id);
+                var dbquestion =  _dbContext.Set<QuestionType>().FirstOrDefault(x => x.Id == item.Id);
                 if (dbquestion == null)
                 {
                     dbquestion = item;

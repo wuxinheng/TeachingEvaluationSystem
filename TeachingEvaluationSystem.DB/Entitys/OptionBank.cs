@@ -10,9 +10,15 @@ namespace TeachingEvaluationSystem.DB.Entitys
 {
     public class OptionBank : BaseEntity
     {
+        public OptionBank()
+        {
+            Code = Guid.NewGuid();
+        }
         [Required] public string? Content { get; set; }
         public QuestionBank? QuestionBank { get; set; }
         [Required] public double Weight { get; set; }
-
+        [NotMapped] public Guid Code { get; set; }
+        [NotMapped]
+        public bool Check { get; set; }
     }
 }

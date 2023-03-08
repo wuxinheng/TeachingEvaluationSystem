@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+
 using TeachingEvaluationSystem.DB;
 
 namespace TeachingEvaluationSystem.Data
@@ -27,10 +28,10 @@ namespace TeachingEvaluationSystem.Data
             return Task.FromResult(page);
         }
 
-        public async Task<DB.Entitys.Class> Get(int id)
+        public Task<DB.Entitys.Class> Get(int id)
         {
-            var classes = await _dbContext.Set<DB.Entitys.Class>().FirstOrDefaultAsync(x => x.Id == id);
-            return classes;
+            var classes = _dbContext.Set<DB.Entitys.Class>().FirstOrDefault(x => x.Id == id);
+            return Task.FromResult(classes);
         }
 
         public async Task<bool> Detele(DB.Entitys.Class @class)
@@ -42,7 +43,7 @@ namespace TeachingEvaluationSystem.Data
 
         public async Task<bool> Save(DB.Entitys.Class @class)
         {
-            var dbclass = await _dbContext.Set<DB.Entitys.Class>().FirstOrDefaultAsync(x => x.Id == @class.Id);
+            var dbclass =  _dbContext.Set<DB.Entitys.Class>().FirstOrDefault(x => x.Id == @class.Id);
             if (dbclass == null)
             {
                 dbclass = @class;

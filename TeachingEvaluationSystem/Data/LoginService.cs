@@ -15,24 +15,24 @@ namespace TeachingEvaluationSystem.Data
             _globalInfo = globalInfo;
         }
 
-        public async Task<bool> Login(User currUser)
+        public Task<bool> Login(User currUser)
         {
             try
             {
-                var user = await _dbContext.Set<User>().FirstOrDefaultAsync(x => x.Name == currUser.Name && x.Password == currUser.Password);
+                var user = _dbContext.Set<User>().FirstOrDefault(x => x.Name == currUser.Name && x.Password == currUser.Password);
                 if (user == null)
                 {
-                    return false;
+                    return Task.FromResult(false);
                 }
-                _globalInfo.User=user;
-                return true;
+                _globalInfo.User = user;
+                return Task.FromResult(true);
             }
             catch (Exception e)
             {
 
                 throw;
             }
-           
+
         }
     }
 }

@@ -32,6 +32,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<QuestionBankService>(); 
         builder.Services.AddSingleton<UserClassesService>(); 
         builder.Services.AddSingleton<SubjectService>(); 
+        builder.Services.AddSingleton<UserAnswerService>(); 
         builder.Services.AddSingleton<GlobalInfo>(); 
         builder.Services.AddTDesign();
         return builder.Build();

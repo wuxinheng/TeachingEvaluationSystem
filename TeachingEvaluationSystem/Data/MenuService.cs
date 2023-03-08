@@ -40,11 +40,11 @@ namespace TeachingEvaluationSystem.Data
             return menus;
         }
 
-        public async Task<Menu> Get(int id)
+        public Task<Menu> Get(int id)
         {
-            var menus = await _dbContext.Set<Menu>().FirstOrDefaultAsync(x => x.Id == id);
+            var menus = _dbContext.Set<Menu>().FirstOrDefault(x => x.Id == id);
 
-            return menus;
+            return Task.FromResult(menus);
         }
 
         public async Task<bool> Detele(Menu role)
@@ -56,7 +56,7 @@ namespace TeachingEvaluationSystem.Data
 
         public async Task<bool> Save(Menu role)
         {
-            var dbrole = await _dbContext.Set<Menu>().FirstOrDefaultAsync(x => x.Id == role.Id);
+            var dbrole =  _dbContext.Set<Menu>().FirstOrDefault(x => x.Id == role.Id);
             if (dbrole == null)
             {
                 dbrole = role;

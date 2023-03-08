@@ -9,8 +9,8 @@ namespace TeachingEvaluationSystem.Data
     public class BaseService<T> where T : BaseEntity, new()
 
     {
-        private readonly TeachingEvaluationSystemDB _dbContext;
-        private readonly GlobalInfo _globalInfo;
+        protected readonly TeachingEvaluationSystemDB _dbContext;
+        protected readonly GlobalInfo _globalInfo;
         public BaseService(TeachingEvaluationSystemDB dbContext, GlobalInfo globalInfo)
         {
             _dbContext = dbContext;

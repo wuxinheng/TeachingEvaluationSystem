@@ -10,14 +10,17 @@ namespace TeachingEvaluationSystem.DB.Entitys
     {
         public UserAnswer()
         {
-            User = new User();
-            OptionBank = new OptionBank();
-            QuestionBank = new QuestionBank();
+            AnswerDetails = new List<UserAnswerDetail>();
         }
-        public User User { get; set; }
-        public OptionBank OptionBank { get; set; }
-        public QuestionBank QuestionBank { get; set; }
-        public int QuestionScores { get; set; }
-        public int OptionScores { get; set; }
+        public int StudentId { get; set; }
+        public User Teacher { get; set; }
+        public int TeacherId { get; set; }
+        public Subject Subject { get; set; }
+        public int SubjectId { get; set; }
+        public Class Class { get; set; }
+        public int ClassId { get; set; }
+        public int Scores { get; set; }
+        public string YearMonth { get; set; }
+        public List<UserAnswerDetail> AnswerDetails { get; set; }
     }
 }
