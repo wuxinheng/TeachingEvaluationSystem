@@ -23,44 +23,50 @@ namespace TeachingEvaluationSystem.DB
 
         private void DataInit()
         {
-            //#region DataInit
+            #region DataInit
 
 
-            //if (Roles.Count() == 0)
-            //{
-            //    var roles = new List<Role>
-            //    {
-            //        new (){Name = "管理员",Description = "系统管理员"},
-            //        new (){Name = "老师",Description = "被评价对象"},
-            //        new (){Name = "学生",Description = "评价主体"},
-            //    };
-            //    Roles.AddRange(roles);
-            //}
-            //if (Users.Count() == 0)
-            //{
-            //    Users.Add(new User()
-            //    {
-            //        Name = "admin",
-            //        Email = "123@qq.com",
-            //        Password = "admin",
-            //        RoleId = 1,
-            //    });
+            if (Roles.Count() == 0)
+            {
+                var roles = new List<Role>
+                {
+                    new (){Name = "管理员",Description = "系统管理员"},
+                    new (){Name = "老师",Description = "被评价对象"},
+                    new (){Name = "学生",Description = "评价主体"},
+                };
+                Roles.AddRange(roles);
+            }
+            if (Users.Count() == 0)
+            {
+                Users.Add(new User()
+                {
+                    Name = "admin",
+                    Email = "123@qq.com",
+                    Password = "admin",
+                    RoleId = 1,
+                });
 
-            //}
-            //if (Menus.Count() == 0)
-            //{
-            //    var menus = new List<Menu>
-            //    {
-            //        new() { Name = "主页", Route = @$"" },
-            //        new() { Name = "登录", Route = @$"login" },
-            //        new() { Name = "用户", Route = @$"user/index" },
-            //        new() { Name = "菜单", Route = @$"role/index" },
-            //        new() { Name = "角色", Route = @$"menu/index" },
-            //    };
-            //    Menus.AddRange(menus);
-            //}
-            //this.SaveChanges();
-            //#endregion
+            }
+            if (Menus.Count() == 0)
+            {
+                var menus = new List<Menu>
+                {
+                    new() { Name = "主页", Route = @$"" },
+                    new() { Name = "登录", Route = @$"login" },
+                    new() { Name = "用户", Route = @$"user/index" },
+                    new() { Name = "菜单", Route = @$"role/index" },
+                    new() { Name = "角色", Route = @$"menu/index" },
+                    new() { Name = "评价", Route = @$"evaluationpage/index" },
+                    new() { Name = "班级", Route = @$"class/index" },
+                    new() { Name = "学科", Route = @$"subjectpage/index" },
+                    new() { Name = "题库", Route = @$"question/index" },
+                    new() { Name = "题库类型", Route = @$"questiontype/index" }
+                };
+                Menus.AddRange(menus);
+            }
+
+            this.SaveChanges();
+            #endregion
         }
         public DbSet<Menu> Menus { get; set; }
         public DbSet<Role> Roles { get; set; }
