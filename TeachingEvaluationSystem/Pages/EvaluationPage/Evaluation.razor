@@ -15,7 +15,6 @@
         <div class="mb-3">
             @foreach (var option in item.OptionBanks)
             {
-                @option.Check.ToString()
                 <TeachingEvaluationSystem.Component.DiyRadio Id="@option.Code.ToString()" Name="@item.Code.ToString()" Label="@option.Content" @bind-Value="@option.Check" />
             }
         </div>
