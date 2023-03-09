@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
 using TeachingEvaluationSystem.DB;
+using TeachingEvaluationSystem.Service.Global;
 
-namespace TeachingEvaluationSystem.Data
+namespace TeachingEvaluationSystem.Service
 {
     public class ClassService
     {

@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 using TeachingEvaluationSystem.DB.Entitys;
 using TeachingEvaluationSystem.DB;
 using Microsoft.EntityFrameworkCore;
+using TeachingEvaluationSystem.Service.Global;
 
-namespace TeachingEvaluationSystem.Data
+namespace TeachingEvaluationSystem.Service
 {
     public class QuestionTypeService
     {

@@ -76,7 +76,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TeachingEvaluationSystem.DB\TeachingEvaluationSystem.DB.csproj" />
+    <ProjectReference Include="..\TeachingEvaluationSystem.Service\TeachingEvaluationSystem.Service.csproj" />
   </ItemGroup>
 
   <ItemGroup>

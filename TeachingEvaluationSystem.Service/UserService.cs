@@ -6,10 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using TeachingEvaluationSystem.Comom;
 using TeachingEvaluationSystem.DB;
 using TeachingEvaluationSystem.DB.Entitys;
+using TeachingEvaluationSystem.Service.Global;
 
-namespace TeachingEvaluationSystem.Data
+namespace TeachingEvaluationSystem.Service
 {
     public class UserService
     {
@@ -21,7 +23,7 @@ namespace TeachingEvaluationSystem.Data
             _globalInfo = globalInfo;
         }
 
-        public Task<Comom.Page<User>> GetPage(int index, int size)
+        public Task<Page<User>> GetPage(int index, int size)
         {
             var users = _dbContext.Set<User>().ToList().Take(size).Skip((index - 1) * size).ToList();
             Comom.Page<User> page = new Comom.Page<User>()
@@ -41,7 +43,7 @@ namespace TeachingEvaluationSystem.Data
             return users;
         }
 
-        public  Task<User> Get(int id)
+        public Task<User> Get(int id)
         {
             var users = _dbContext.Set<User>().FirstOrDefault(x => x.Id == id);
 
@@ -57,7 +59,7 @@ namespace TeachingEvaluationSystem.Data
 
         public async Task<bool> Save(User user)
         {
-            var dbuser =  _dbContext.Set<User>().FirstOrDefault(x => x.Id == user.Id);
+            var dbuser = _dbContext.Set<User>().FirstOrDefault(x => x.Id == user.Id);
             if (dbuser == null)
             {
                 dbuser = user;

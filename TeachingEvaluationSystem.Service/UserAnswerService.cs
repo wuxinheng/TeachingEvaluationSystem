@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 using TeachingEvaluationSystem.DB;
 using TeachingEvaluationSystem.DB.Entitys;
+using TeachingEvaluationSystem.Service.Base;
+using TeachingEvaluationSystem.Service.Global;
 
-namespace TeachingEvaluationSystem.Data
+namespace TeachingEvaluationSystem.Service
 {
     public class UserAnswerService : BaseService<UserAnswer>
     {

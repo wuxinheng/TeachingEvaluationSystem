@@ -1,10 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
 using TeachingEvaluationSystem.DB;
 using TeachingEvaluationSystem.DB.Entitys;
+using TeachingEvaluationSystem.Service.Global;
 
-
-namespace TeachingEvaluationSystem.Data
+namespace TeachingEvaluationSystem.Service.Base
 {
     public class BaseService<T> where T : BaseEntity, new()
 
@@ -64,18 +70,18 @@ namespace TeachingEvaluationSystem.Data
             {
 
 
-            var dbt = await _dbContext.Set<T>().FirstOrDefaultAsync(x => x.Id == t.Id);
-            if (dbt == null)
-            {
-                dbt = t;
-                await _dbContext.Set<T>().AddAsync(dbt);
-            }
-            else
-            {
-                _dbContext.Set<T>().Update(t);
-            }
-            var count = await _dbContext.SaveChangesAsync();
-            return count > 0;
+                var dbt = await _dbContext.Set<T>().FirstOrDefaultAsync(x => x.Id == t.Id);
+                if (dbt == null)
+                {
+                    dbt = t;
+                    await _dbContext.Set<T>().AddAsync(dbt);
+                }
+                else
+                {
+                    _dbContext.Set<T>().Update(t);
+                }
+                var count = await _dbContext.SaveChangesAsync();
+                return count > 0;
             }
             catch (Exception e)
             {

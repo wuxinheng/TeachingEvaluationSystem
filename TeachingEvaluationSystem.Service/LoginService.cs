@@ -2,8 +2,9 @@
 
 using TeachingEvaluationSystem.DB;
 using TeachingEvaluationSystem.DB.Entitys;
+using TeachingEvaluationSystem.Service.Global;
 
-namespace TeachingEvaluationSystem.Data
+namespace TeachingEvaluationSystem.Service
 {
     public class LoginService
     {

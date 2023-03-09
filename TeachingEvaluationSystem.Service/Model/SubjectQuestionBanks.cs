@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using TeachingEvaluationSystem.DB.Entitys;
 
-namespace TeachingEvaluationSystem.Model
+namespace TeachingEvaluationSystem.Service.Model
 {
     public class SubjectQuestionBank
     {

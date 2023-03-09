@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 using TeachingEvaluationSystem.DB.Entitys;
 using TeachingEvaluationSystem.DB;
 using Microsoft.EntityFrameworkCore;
+using TeachingEvaluationSystem.Service.Global;
 
-namespace TeachingEvaluationSystem.Data
+namespace TeachingEvaluationSystem.Service
 {
     public class MenuService
     {
@@ -56,7 +57,7 @@ namespace TeachingEvaluationSystem.Data
 
         public async Task<bool> Save(Menu role)
         {
-            var dbrole =  _dbContext.Set<Menu>().FirstOrDefault(x => x.Id == role.Id);
+            var dbrole = _dbContext.Set<Menu>().FirstOrDefault(x => x.Id == role.Id);
             if (dbrole == null)
             {
                 dbrole = role;

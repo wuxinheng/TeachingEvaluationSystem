@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using TeachingEvaluationSystem.DB.Entitys;
 
-namespace TeachingEvaluationSystem.Data
+namespace TeachingEvaluationSystem.Service.Global
 {
     public class GlobalInfo
     {

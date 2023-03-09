@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components.WebView.Maui;
 
-using TeachingEvaluationSystem.Data;
 using TeachingEvaluationSystem.DB;
-
+using TeachingEvaluationSystem.Service;
+using TeachingEvaluationSystem.Service.Framework;
+using TeachingEvaluationSystem.Service.Global;
 
 namespace TeachingEvaluationSystem;
 
@@ -22,18 +23,7 @@ public static class MauiProgram
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
 #endif
-        builder.Services.AddDbContext<TeachingEvaluationSystemDB>();
-        builder.Services.AddSingleton<LoginService>();
-        builder.Services.AddSingleton<UserService>(); 
-        builder.Services.AddSingleton<RoleService>(); 
-        builder.Services.AddSingleton<MenuService>(); 
-        builder.Services.AddSingleton<ClassService>(); 
-        builder.Services.AddSingleton<QuestionTypeService>(); 
-        builder.Services.AddSingleton<QuestionBankService>(); 
-        builder.Services.AddSingleton<UserClassesService>(); 
-        builder.Services.AddSingleton<SubjectService>(); 
-        builder.Services.AddSingleton<UserAnswerService>(); 
-        builder.Services.AddSingleton<GlobalInfo>(); 
+        builder.Services.AddTES();
         builder.Services.AddTDesign();
         return builder.Build();
     }

@@ -1,8 +1,10 @@
 ﻿using TeachingEvaluationSystem.DB;
 using TeachingEvaluationSystem.DB.Entitys;
-using TeachingEvaluationSystem.Model;
+using TeachingEvaluationSystem.Service.Base;
+using TeachingEvaluationSystem.Service.Global;
+using TeachingEvaluationSystem.Service.Model;
 
-namespace TeachingEvaluationSystem.Data
+namespace TeachingEvaluationSystem.Service
 {
     public class SubjectService : BaseService<Subject>
     {

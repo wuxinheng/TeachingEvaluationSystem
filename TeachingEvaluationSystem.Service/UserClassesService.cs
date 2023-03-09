@@ -9,9 +9,10 @@ using System.Threading.Tasks;
 
 using TeachingEvaluationSystem.DB;
 using TeachingEvaluationSystem.DB.Entitys;
-using TeachingEvaluationSystem.Model;
+using TeachingEvaluationSystem.Service.Global;
+using TeachingEvaluationSystem.Service.Model;
 
-namespace TeachingEvaluationSystem.Data
+namespace TeachingEvaluationSystem.Service
 {
     public class UserClassesService
     {
@@ -81,7 +82,7 @@ namespace TeachingEvaluationSystem.Data
                   }).ToList();
 
             var yearMonth = DateTime.Now.ToString("yyyy-MM");
-            var userAnswers = _dbContext.UserAnswers.Where(x => x.YearMonth == yearMonth&&x.StudentId==user.Id).ToList();
+            var userAnswers = _dbContext.UserAnswers.Where(x => x.YearMonth == yearMonth && x.StudentId == user.Id).ToList();
 
             foreach (var item in result)
             {
