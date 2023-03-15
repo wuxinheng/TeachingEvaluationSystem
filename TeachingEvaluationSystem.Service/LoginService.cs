@@ -22,11 +22,12 @@ namespace TeachingEvaluationSystem.Service
             {
                 
                 var user = _dbContext.Set<User>().FirstOrDefault(x => x.Name == currUser.Name && x.Password == currUser.Password);
-                user.Class = _dbContext.Classes.FirstOrDefault(x => x.Id == user.ClassId);
+                
                 if (user == null)
                 {
                     return Task.FromResult(false);
                 }
+                user.Class = _dbContext.Classes.FirstOrDefault(x => x.Id == user.ClassId);
                 _globalInfo.User = user;
                 return Task.FromResult(true);
             }
