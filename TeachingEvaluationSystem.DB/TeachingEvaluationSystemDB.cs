@@ -91,9 +91,7 @@ namespace TeachingEvaluationSystem.DB
             optionsBuilder.UseLoggerFactory(LoggerFactory);
         }
 
-        private static readonly byte[] Salt = Encoding.ASCII.GetBytes("my salt");
-        private static readonly byte[] AesKey = new byte[32];
-        private static readonly byte[] AesIV = new byte[16];
+        private static string key = "12345678"; // 8位秘钥
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -114,50 +112,54 @@ namespace TeachingEvaluationSystem.DB
             modelBuilder.Entity<User>()
                 .Property(u => u.Password)
                 .HasConversion(
-                    v => EncryptString(v),
-                    v => DecryptString(v));
+                    v => Encrypt(v),
+                    v => Decrypt(v));
+            modelBuilder.Entity<User>()
+                .Property(u => u.Email)
+                .HasConversion(
+                    v => Encrypt(v),
+                    v => Decrypt(v));
         }
-        private static string EncryptString(string plainText)
+        // DES加密
+        private static string Encrypt(string input)
         {
-            using (var aes = Aes.Create())
+            byte[] inputBytes = Encoding.UTF8.GetBytes(input);
+            byte[] keyBytes = Encoding.UTF8.GetBytes(key);
+            byte[] iv = keyBytes; // DES算法的向量参数需要和秘钥相同
+
+            using (DESCryptoServiceProvider des = new DESCryptoServiceProvider())
             {
-                aes.Key = AesKey;
-                aes.IV = AesIV;
+                des.Mode = CipherMode.CBC;
+                des.Padding = PaddingMode.PKCS7;
+                des.Key = keyBytes;
+                des.IV = iv;
 
-                var pbkdf2 = new Rfc2898DeriveBytes(plainText, Salt, 10000);
-                var key = pbkdf2.GetBytes(32);
-
-                using (var encryptor = aes.CreateEncryptor(key, aes.IV))
-                using (var ms = new System.IO.MemoryStream())
-                using (var cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
+                using (ICryptoTransform encryptor = des.CreateEncryptor())
                 {
-                    using (var sw = new System.IO.StreamWriter(cs))
-                    {
-                        sw.Write(plainText);
-                    }
-
-                    var encrypted = ms.ToArray();
-                    return Convert.ToBase64String(encrypted);
+                    byte[] resultBytes = encryptor.TransformFinalBlock(inputBytes, 0, inputBytes.Length);
+                    return Convert.ToBase64String(resultBytes);
                 }
             }
         }
 
-        private static string DecryptString(string encryptedText)
+        // DES解密
+        private static string Decrypt(string input)
         {
-            using (var aes = Aes.Create())
+            byte[] inputBytes = Convert.FromBase64String(input);
+            byte[] keyBytes = Encoding.UTF8.GetBytes(key);
+            byte[] iv = keyBytes;
+
+            using (DESCryptoServiceProvider des = new DESCryptoServiceProvider())
             {
-                aes.Key = AesKey;
-                aes.IV = AesIV;
+                des.Mode = CipherMode.CBC;
+                des.Padding = PaddingMode.PKCS7;
+                des.Key = keyBytes;
+                des.IV = iv;
 
-                var pbkdf2 = new Rfc2898DeriveBytes(encryptedText, Salt, 10000);
-                var key = pbkdf2.GetBytes(32);
-
-                using (var decryptor = aes.CreateDecryptor(key, aes.IV))
-                using (var ms = new System.IO.MemoryStream(Convert.FromBase64String(encryptedText)))
-                using (var cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read))
-                using (var sr = new System.IO.StreamReader(cs))
+                using (ICryptoTransform decryptor = des.CreateDecryptor())
                 {
-                    return sr.ReadToEnd();
+                    byte[] resultBytes = decryptor.TransformFinalBlock(inputBytes, 0, inputBytes.Length);
+                    return Encoding.UTF8.GetString(resultBytes);
                 }
             }
         }
