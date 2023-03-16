@@ -127,6 +127,7 @@ namespace TeachingEvaluationSystem.DB
             byte[] keyBytes = Encoding.UTF8.GetBytes(key);
             byte[] iv = keyBytes; // DES算法的向量参数需要和秘钥相同
 
+#pragma warning disable SYSLIB0021 // 类型或成员已过时
             using (DESCryptoServiceProvider des = new DESCryptoServiceProvider())
             {
                 des.Mode = CipherMode.CBC;
@@ -140,6 +141,7 @@ namespace TeachingEvaluationSystem.DB
                     return Convert.ToBase64String(resultBytes);
                 }
             }
+#pragma warning restore SYSLIB0021 // 类型或成员已过时
         }
 
         // DES解密
