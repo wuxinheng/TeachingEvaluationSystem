@@ -3,6 +3,8 @@ using Microsoft.Extensions.Logging.Debug;
 using Microsoft.Extensions.Logging;
 
 using TeachingEvaluationSystem.DB.Entitys;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace TeachingEvaluationSystem.DB
 {
@@ -77,7 +79,6 @@ namespace TeachingEvaluationSystem.DB
         public DbSet<UserAnswerDetail> UserAnswerDetails { get; set; }
         public DbSet<UserAnswer> UserAnswers { get; set; }
         public DbSet<UserClass> UserClasses { get; set; }
-
         public DbSet<QuestionBankSubject> BankSubjects { get; set; }
         public DbSet<Subject> Subjects { get; set; }
 
@@ -89,6 +90,10 @@ namespace TeachingEvaluationSystem.DB
 
             optionsBuilder.UseLoggerFactory(LoggerFactory);
         }
+
+        private static readonly byte[] Salt = Encoding.ASCII.GetBytes("my salt");
+        private static readonly byte[] AesKey = new byte[32];
+        private static readonly byte[] AesIV = new byte[16];
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -104,7 +109,57 @@ namespace TeachingEvaluationSystem.DB
             modelBuilder.Entity<QuestionBankSubject>().Navigation(e => e.QuestionBank).AutoInclude();
             modelBuilder.Entity<Subject>().Navigation(e => e.Questions).AutoInclude();
             modelBuilder.Entity<UserAnswer>().Navigation(e => e.AnswerDetails).AutoInclude();
+
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.Password)
+                .HasConversion(
+                    v => EncryptString(v),
+                    v => DecryptString(v));
+        }
+        private static string EncryptString(string plainText)
+        {
+            using (var aes = Aes.Create())
+            {
+                aes.Key = AesKey;
+                aes.IV = AesIV;
+
+                var pbkdf2 = new Rfc2898DeriveBytes(plainText, Salt, 10000);
+                var key = pbkdf2.GetBytes(32);
+
+                using (var encryptor = aes.CreateEncryptor(key, aes.IV))
+                using (var ms = new System.IO.MemoryStream())
+                using (var cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
+                {
+                    using (var sw = new System.IO.StreamWriter(cs))
+                    {
+                        sw.Write(plainText);
+                    }
+
+                    var encrypted = ms.ToArray();
+                    return Convert.ToBase64String(encrypted);
+                }
+            }
         }
 
+        private static string DecryptString(string encryptedText)
+        {
+            using (var aes = Aes.Create())
+            {
+                aes.Key = AesKey;
+                aes.IV = AesIV;
+
+                var pbkdf2 = new Rfc2898DeriveBytes(encryptedText, Salt, 10000);
+                var key = pbkdf2.GetBytes(32);
+
+                using (var decryptor = aes.CreateDecryptor(key, aes.IV))
+                using (var ms = new System.IO.MemoryStream(Convert.FromBase64String(encryptedText)))
+                using (var cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read))
+                using (var sr = new System.IO.StreamReader(cs))
+                {
+                    return sr.ReadToEnd();
+                }
+            }
+        }
     }
 }
