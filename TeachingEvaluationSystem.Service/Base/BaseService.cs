@@ -23,7 +23,7 @@ namespace TeachingEvaluationSystem.Service.Base
             _globalInfo = globalInfo;
         }
 
-        public Task<Comom.Page<T>> GetPage(int index, int size)
+        public virtual Task<Comom.Page<T>> GetPage(int index, int size)
         {
             var users = _dbContext.Set<T>().ToList().Take(size).Skip((index - 1) * size).ToList();
             Comom.Page<T> page = new Comom.Page<T>()
@@ -37,13 +37,13 @@ namespace TeachingEvaluationSystem.Service.Base
             return Task.FromResult(page);
         }
 
-        public async Task<List<T>> GetList()
+        public virtual async Task<List<T>> GetList()
         {
             var users = await _dbContext.Set<T>().ToListAsync();
             return users;
         }
 
-        public Task<T> Get(int id)
+        public virtual Task<T> Get(int id)
         {
             try
             {
@@ -57,14 +57,14 @@ namespace TeachingEvaluationSystem.Service.Base
             }
         }
 
-        public async Task<bool> Detele(T t)
+        public virtual async Task<bool> Detele(T t)
         {
             _dbContext.Set<T>().Remove(t);
             var count = await _dbContext.SaveChangesAsync();
             return count > 0;
         }
 
-        public async Task<bool> Save(T t)
+        public virtual async Task<bool> Save(T t)
         {
             try
             {
